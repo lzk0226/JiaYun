@@ -18,9 +18,10 @@ public interface CourseMapper {
             "FROM v_course_detail WHERE status = 1 " +
             "ORDER BY popular DESC, id ASC")
     @Results(id = "courseResultMap", value = {
+            @Result(property = "subjectId", column = "subject_id"),
             @Result(property = "studentsCount", column = "students_count"),
             @Result(property = "isCombined", column = "is_combined"),
-            @Result(property = "subjectsName", column = "subjects_name"),
+            @Result(property = "subjectsName", column = "subjects_name"),  // 确保这行存在
             @Result(property = "features", column = "features",
                     typeHandler = StringListTypeHandler.class)
     })
@@ -77,12 +78,12 @@ public interface CourseMapper {
      */
     @Select("<script>" +
             "SELECT id, name, subject_id, type, subtitle, badge, duration, period, " +
-            "features, price, popular, students_count, is_combined " +
-            "FROM course WHERE status = 1 " +
+            "features, price, popular, students_count, is_combined, subjects_name " +  // ✅ 添加 subjects_name
+            "FROM v_course_detail WHERE status = 1 " +  // ✅ 改为查询视图
             "<if test='subjectId != null'>" +
             "AND (subject_id = #{subjectId} " +
             "OR (is_combined = 1 AND EXISTS (" +
-            "  SELECT 1 FROM course_subject cs WHERE cs.course_id = course.id AND cs.subject_id = #{subjectId}" +
+            "  SELECT 1 FROM course_subject cs WHERE cs.course_id = id AND cs.subject_id = #{subjectId}" +
             ")))" +
             "</if>" +
             "<if test='isCombined != null'>" +

@@ -43,11 +43,17 @@ public class CourseServiceImpl implements CourseService {
         // 处理科目筛选
         if (subject != null && !subject.isEmpty()) {
             switch (subject) {
+                case "subject1":
+                    subjectId = 1;
+                    break;
                 case "subject2":
                     subjectId = 2;
                     break;
                 case "subject3":
                     subjectId = 3;
+                    break;
+                case "subject4":
+                    subjectId = 4;
                     break;
                 case "all":
                     isCombined = true;
