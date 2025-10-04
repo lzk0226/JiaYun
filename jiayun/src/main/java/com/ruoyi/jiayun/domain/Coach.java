@@ -27,5 +27,8 @@ public class Coach {
     private List<String> features;
     private String avatar;
     private String description;
-    // 不包含 status, created_at, updated_at
+
+
+    private String subjectsCode;
+    private String subjectsName;
 }
