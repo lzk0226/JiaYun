@@ -16,6 +16,7 @@ public class Student {
     private Long id;
     private String userId;
     private String name;
+    private String password;
     private String gender; // male/female
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthdate;
