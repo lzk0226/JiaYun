@@ -14,25 +14,23 @@ import java.util.List;
 public interface CourseService {
 
     /**
-     * 获取所有课程列表
+     * 获取所有课程
      */
     List<Course> getAllCourses();
 
     /**
      * 根据筛选条件获取课程
-     * @param subject 科目代码（subject2/subject3/all）
-     * @param type 课程类型（standard/vip/intensive）
-     * @param sort 排序方式（default/price-asc/price-desc/popular）
      */
     List<Course> getCoursesByFilters(String subject, String type, String sort);
 
     /**
-     * 根据ID获取课程详情
+     * 获取课程详情
      */
     CourseDetail getCourseDetail(Long id);
 
     /**
-     * 报名课程
+     * 报名课程（检查科目冲突）
+     * @return "success" 或 具体错误信息
      */
-    boolean enrollCourse(Long studentId, Long courseId, Long coachId);
+    String enrollCourse(Long studentId, Long courseId, Long coachId);
 }

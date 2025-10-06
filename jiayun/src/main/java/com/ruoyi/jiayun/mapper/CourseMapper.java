@@ -10,6 +10,7 @@ import java.util.List;
 @Mapper
 public interface CourseMapper {
 
+
     /**
      * 查询所有可用课程（基础信息）
      */
@@ -21,7 +22,7 @@ public interface CourseMapper {
             @Result(property = "subjectId", column = "subject_id"),
             @Result(property = "studentsCount", column = "students_count"),
             @Result(property = "isCombined", column = "is_combined"),
-            @Result(property = "subjectsName", column = "subjects_name"),  // 确保这行存在
+            @Result(property = "subjectsName", column = "subjects_name"),
             @Result(property = "features", column = "features",
                     typeHandler = StringListTypeHandler.class)
     })
@@ -78,8 +79,8 @@ public interface CourseMapper {
      */
     @Select("<script>" +
             "SELECT id, name, subject_id, type, subtitle, badge, duration, period, " +
-            "features, price, popular, students_count, is_combined, subjects_name " +  // ✅ 添加 subjects_name
-            "FROM v_course_detail WHERE status = 1 " +  // ✅ 改为查询视图
+            "features, price, popular, students_count, is_combined, subjects_name " +
+            "FROM v_course_detail WHERE status = 1 " +
             "<if test='subjectId != null'>" +
             "AND (subject_id = #{subjectId} " +
             "OR (is_combined = 1 AND EXISTS (" +
@@ -103,4 +104,21 @@ public interface CourseMapper {
      */
     @Update("UPDATE course SET students_count = students_count + 1 WHERE id = #{courseId}")
     int updateStudentsCount(Long courseId);
+
+    /**
+     * 获取课程包含的科目ID列表
+     * 单科课程返回subject_id，联报课程从course_subject表查询
+     */
+    @Select("<script>" +
+            "SELECT DISTINCT " +
+            "CASE " +
+            "  WHEN c.is_combined = 0 THEN c.subject_id " +
+            "  ELSE cs.subject_id " +
+            "END as subject_id " +
+            "FROM course c " +
+            "LEFT JOIN course_subject cs ON c.id = cs.course_id " +
+            "WHERE c.id = #{courseId} " +
+            "AND (c.is_combined = 0 OR cs.subject_id IS NOT NULL)" +
+            "</script>")
+    List<Integer> getCourseSubjects(Long courseId);
 }

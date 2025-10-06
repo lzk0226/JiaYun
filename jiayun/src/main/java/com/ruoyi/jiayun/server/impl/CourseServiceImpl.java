@@ -96,19 +96,66 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public boolean enrollCourse(Long studentId, Long courseId, Long coachId) {
+    public String enrollCourse(Long studentId, Long courseId, Long coachId) {
         try {
-            // 插入学员课程记录
+            log.info("开始报名检查: studentId={}, courseId={}", studentId, courseId);
+
+            // 1. 获取要报名的课程信息
+            CourseDetail course = courseMapper.selectCourseDetailById(courseId);
+            if (course == null) {
+                return "课程不存在";
+            }
+
+            // 2. 获取课程包含的科目ID列表
+            List<Integer> courseSubjects = courseMapper.getCourseSubjects(courseId);
+            if (courseSubjects == null || courseSubjects.isEmpty()) {
+                return "课程科目信息错误";
+            }
+
+            log.info("课程包含科目: {}", courseSubjects);
+
+            // 3. 检查学员是否已报名包含相同科目的课程
+            for (Integer subjectId : courseSubjects) {
+                boolean hasEnrolled = studentCourseMapper.hasEnrolledSubject(studentId, subjectId);
+                if (hasEnrolled) {
+                    // 获取科目名称用于提示
+                    String subjectName = getSubjectName(subjectId);
+                    return "您已报名了包含" + subjectName + "的课程，同一科目只能报名一个课程";
+                }
+            }
+
+            // 4. 没有冲突，可以报名
             int result = studentCourseMapper.insertStudentCourse(studentId, courseId, coachId);
             if (result > 0) {
                 // 更新课程报名人数
                 courseMapper.updateStudentsCount(courseId);
-                return true;
+                log.info("课程报名成功: studentId={}, courseId={}", studentId, courseId);
+                return "success";
             }
-            return false;
+
+            return "报名失败，请重试";
+
         } catch (Exception e) {
             log.error("课程报名失败: studentId={}, courseId={}", studentId, courseId, e);
             throw new RuntimeException("课程报名失败", e);
+        }
+    }
+
+    /**
+     * 根据科目ID获取科目名称
+     */
+    private String getSubjectName(Integer subjectId) {
+        switch (subjectId) {
+            case 1:
+                return "科目一";
+            case 2:
+                return "科目二";
+            case 3:
+                return "科目三";
+            case 4:
+                return "科目四";
+            default:
+                return "未知科目";
         }
     }
 }
