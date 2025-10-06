@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * @version 1.0
@@ -21,10 +22,11 @@ public class Reservation {
     private LocalDate reservationDate;
     private String timeSlot;
     private String remarks;
-    private String status; // upcoming/completed/cancelled
+    private String status;
+    private Date created_at;
+    private Date updated_at;
 
     // 关联信息
     private Coach coach;
     private Vehicle vehicle;
-    // 不包含 created_at, updated_at
 }
