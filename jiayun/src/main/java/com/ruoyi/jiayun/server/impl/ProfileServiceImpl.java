@@ -1,5 +1,4 @@
 package com.ruoyi.jiayun.server.impl;
-
 import com.ruoyi.jiayun.domain.*;
 import com.ruoyi.jiayun.mapper.ProfileMapper;
 import com.ruoyi.jiayun.mapper.StudentMapper;
@@ -7,19 +6,12 @@ import com.ruoyi.jiayun.server.ProfileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @version 1.0
- * 文件类型/说明:
- * 文件创建时间:2025/10/5下午 1:14
- * @Author : SoakLightDust
- */
 @Slf4j
 @Service
 public class ProfileServiceImpl implements ProfileService {

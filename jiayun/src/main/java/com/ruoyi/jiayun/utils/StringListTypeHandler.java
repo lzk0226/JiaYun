@@ -13,12 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-/**
- * @version 1.0
- * 文件类型/说明:
- * 文件创建时间:2025/10/3下午 8:36
- * @Author : SoakLightDust
- */
 @MappedTypes(List.class)
 public class StringListTypeHandler extends BaseTypeHandler<List<String>> {
 

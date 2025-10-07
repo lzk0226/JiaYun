@@ -12,12 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Map;
 
-/**
- * @version 1.0
- * 文件类型/说明:
- * 文件创建时间:2025/10/5下午 1:14
- * @Author : SoakLightDust
- */
 @Slf4j
 @RestController
 @RequestMapping("/user/profile")

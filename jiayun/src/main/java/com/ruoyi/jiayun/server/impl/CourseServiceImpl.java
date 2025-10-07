@@ -1,5 +1,4 @@
 package com.ruoyi.jiayun.server.impl;
-
 import com.ruoyi.jiayun.domain.Course;
 import com.ruoyi.jiayun.domain.CourseDetail;
 import com.ruoyi.jiayun.mapper.CourseMapper;
@@ -9,17 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @version 1.0
- * 文件类型/说明:
- * 文件创建时间:2025/10/3下午 6:54
- * @Author : SoakLightDust
- */
 @Slf4j
 @Service
 public class CourseServiceImpl implements CourseService {

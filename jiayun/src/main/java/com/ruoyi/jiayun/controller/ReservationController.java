@@ -15,12 +15,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @version 1.0
- * 文件类型/说明: 预约管理控制器
- * 文件创建时间:2025/10/5下午 8:44
- * @Author : SoakLightDust
- */
 @Slf4j
 @RestController
 @RequestMapping("/user/reservation")

@@ -1,5 +1,4 @@
 package com.ruoyi.jiayun.server.impl;
-
 import com.ruoyi.jiayun.domain.Coach;
 import com.ruoyi.jiayun.domain.Reservation;
 import com.ruoyi.jiayun.domain.Vehicle;
@@ -8,16 +7,9 @@ import com.ruoyi.jiayun.server.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.util.*;
 
-/**
- * @version 1.0
- * 文件类型/说明:
- * 文件创建时间:2025/10/5下午 8:43
- * @Author : SoakLightDust
- */
 @Service
 public class ReservationServiceImpl implements ReservationService {
 

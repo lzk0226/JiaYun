@@ -1,14 +1,6 @@
 package com.ruoyi.jiayun.R;
-
-
 import com.ruoyi.jiayun.emun.ResultCodeEnum;
 
-/**
- * @version 1.0
- * 文件类型/说明:
- * 文件创建时间:2025/5/24下午 8:10
- * @Author : SockLightDust
- */
 public class R<T> {
 
     /** 响应码 */

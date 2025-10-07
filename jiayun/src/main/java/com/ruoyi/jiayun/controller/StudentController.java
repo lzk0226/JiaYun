@@ -1,12 +1,4 @@
 package com.ruoyi.jiayun.controller;
-
-/**
- * @version 1.0
- * 文件类型/说明:
- * 文件创建时间:2025/10/4下午 11:48
- * @Author : SoakLightDust
- */
-
 import com.ruoyi.jiayun.R.Result;
 import com.ruoyi.jiayun.domain.Student;
 import com.ruoyi.jiayun.server.StudentService;

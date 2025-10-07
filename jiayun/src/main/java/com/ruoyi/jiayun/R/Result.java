@@ -1,15 +1,7 @@
 package com.ruoyi.jiayun.R;
-
 import lombok.Data;
-
 import java.io.Serializable;
 
-/**
- * @version 1.0
- * 文件类型/说明:
- * 文件创建时间:2025/10/3下午 6:56
- * @Author : SoakLightDust
- */
 @Data
 public class Result<T> implements Serializable {
     private Integer code;

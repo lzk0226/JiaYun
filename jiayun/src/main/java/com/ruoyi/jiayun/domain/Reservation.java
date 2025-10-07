@@ -1,17 +1,9 @@
 package com.ruoyi.jiayun.domain;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-
 import java.time.LocalDate;
 import java.util.Date;
 
-/**
- * @version 1.0
- * 文件类型/说明:
- * 文件创建时间:2025/10/3下午 12:31
- * @Author : SoakLightDust
- */
 @Data
 public class Reservation {
     private Long id;

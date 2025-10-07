@@ -1,15 +1,7 @@
 package com.ruoyi.jiayun.server;
-
 import com.ruoyi.jiayun.domain.Student;
-
 import java.util.Map;
 
-/**
- * @version 1.0
- * 文件类型/说明:
- * 文件创建时间:2025/10/5下午 1:13
- * @Author : SoakLightDust
- */
 public interface ProfileService {
 
     /**

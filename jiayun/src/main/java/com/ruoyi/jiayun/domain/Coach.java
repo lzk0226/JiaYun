@@ -1,17 +1,7 @@
 package com.ruoyi.jiayun.domain;
-
 import lombok.Data;
-
 import java.math.BigDecimal;
 import java.util.List;
-
-
-/**
- * @version 1.0
- * 文件类型/说明:
- * 文件创建时间:2025/10/3下午 12:27
- * @Author : SoakLightDust
- */
 @Data
 public class Coach {
     private Long id;

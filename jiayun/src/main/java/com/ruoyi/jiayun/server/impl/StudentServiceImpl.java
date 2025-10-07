@@ -1,20 +1,12 @@
 package com.ruoyi.jiayun.server.impl;
-
 import com.ruoyi.jiayun.domain.Student;
 import com.ruoyi.jiayun.mapper.StudentMapper;
 import com.ruoyi.jiayun.server.StudentService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-
 import javax.annotation.Resource;
 import java.time.LocalDate;
 
-/**
- * @version 1.0
- * 文件类型/说明:
- * 文件创建时间:2025/10/4下午 11:41
- * @Author : SoakLightDust
- */
 @Service
 public class StudentServiceImpl implements StudentService {
     @Resource
