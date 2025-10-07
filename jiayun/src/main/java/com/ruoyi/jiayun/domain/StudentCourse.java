@@ -21,5 +21,6 @@ public class StudentCourse {
 
     // 关联信息
     private Course course;
+    private CourseDetail courseDetail;
     private Coach coach;
 }
