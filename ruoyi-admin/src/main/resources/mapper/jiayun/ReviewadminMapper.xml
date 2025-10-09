@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.jiayun.mapper.ReviewadminMapper">
+    
+    <resultMap type="Reviewadmin" id="ReviewadminResult">
+        <result property="id"    column="id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="coachId"    column="coach_id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="rating"    column="rating"    />
+        <result property="content"    column="content"    />
+        <result property="reviewDate"    column="review_date"    />
+        <result property="createdAt"    column="created_at"    />
+    </resultMap>
+
+    <sql id="selectReviewadminVo">
+        select id, student_id, coach_id, student_name, rating, content, review_date, created_at from review
+    </sql>
+
+    <select id="selectReviewadminList" parameterType="Reviewadmin" resultMap="ReviewadminResult">
+        <include refid="selectReviewadminVo"/>
+        <where>  
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="coachId != null "> and coach_id = #{coachId}</if>
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="rating != null "> and rating = #{rating}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="reviewDate != null "> and review_date = #{reviewDate}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectReviewadminById" parameterType="Long" resultMap="ReviewadminResult">
+        <include refid="selectReviewadminVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertReviewadmin" parameterType="Reviewadmin" useGeneratedKeys="true" keyProperty="id">
+        insert into review
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="coachId != null">coach_id,</if>
+            <if test="studentName != null and studentName != ''">student_name,</if>
+            <if test="rating != null">rating,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="reviewDate != null">review_date,</if>
+            <if test="createdAt != null">created_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="coachId != null">#{coachId},</if>
+            <if test="studentName != null and studentName != ''">#{studentName},</if>
+            <if test="rating != null">#{rating},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="reviewDate != null">#{reviewDate},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReviewadmin" parameterType="Reviewadmin">
+        update review
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="coachId != null">coach_id = #{coachId},</if>
+            <if test="studentName != null and studentName != ''">student_name = #{studentName},</if>
+            <if test="rating != null">rating = #{rating},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="reviewDate != null">review_date = #{reviewDate},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReviewadminById" parameterType="Long">
+        delete from review where id = #{id}
+    </delete>
+
+    <delete id="deleteReviewadminByIds" parameterType="String">
+        delete from review where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

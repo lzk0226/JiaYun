@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.jiayun.mapper.CourseSubjectadminMapper">
+    
+    <resultMap type="CourseSubjectadmin" id="CourseSubjectadminResult">
+        <result property="id"    column="id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="subjectId"    column="subject_id"    />
+        <result property="createdAt"    column="created_at"    />
+    </resultMap>
+
+    <sql id="selectCourseSubjectadminVo">
+        select id, course_id, subject_id, created_at from course_subject
+    </sql>
+
+    <select id="selectCourseSubjectadminList" parameterType="CourseSubjectadmin" resultMap="CourseSubjectadminResult">
+        <include refid="selectCourseSubjectadminVo"/>
+        <where>  
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="subjectId != null "> and subject_id = #{subjectId}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectCourseSubjectadminById" parameterType="Long" resultMap="CourseSubjectadminResult">
+        <include refid="selectCourseSubjectadminVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCourseSubjectadmin" parameterType="CourseSubjectadmin" useGeneratedKeys="true" keyProperty="id">
+        insert into course_subject
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseId != null">course_id,</if>
+            <if test="subjectId != null">subject_id,</if>
+            <if test="createdAt != null">created_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseId != null">#{courseId},</if>
+            <if test="subjectId != null">#{subjectId},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCourseSubjectadmin" parameterType="CourseSubjectadmin">
+        update course_subject
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="subjectId != null">subject_id = #{subjectId},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCourseSubjectadminById" parameterType="Long">
+        delete from course_subject where id = #{id}
+    </delete>
+
+    <delete id="deleteCourseSubjectadminByIds" parameterType="String">
+        delete from course_subject where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

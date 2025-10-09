@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.jiayun.mapper.StudentCourseadminMapper">
+    
+    <resultMap type="StudentCourseadmin" id="StudentCourseadminResult">
+        <result property="id"    column="id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="coachId"    column="coach_id"    />
+        <result property="enrollDate"    column="enroll_date"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="completedLessons"    column="completed_lessons"    />
+        <result property="totalLessons"    column="total_lessons"    />
+        <result property="progress"    column="progress"    />
+        <result property="status"    column="status"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectStudentCourseadminVo">
+        select id, student_id, course_id, coach_id, enroll_date, start_date, completed_lessons, total_lessons, progress, status, created_at, updated_at from student_course
+    </sql>
+
+    <select id="selectStudentCourseadminList" parameterType="StudentCourseadmin" resultMap="StudentCourseadminResult">
+        <include refid="selectStudentCourseadminVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="coachId != null "> and coach_id = #{coachId}</if>
+            <if test="enrollDate != null "> and enroll_date = #{enrollDate}</if>
+            <if test="startDate != null "> and start_date = #{startDate}</if>
+            <if test="completedLessons != null "> and completed_lessons = #{completedLessons}</if>
+            <if test="totalLessons != null "> and total_lessons = #{totalLessons}</if>
+            <if test="progress != null "> and progress = #{progress}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectStudentCourseadminById" parameterType="Long" resultMap="StudentCourseadminResult">
+        <include refid="selectStudentCourseadminVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStudentCourseadmin" parameterType="StudentCourseadmin" useGeneratedKeys="true" keyProperty="id">
+        insert into student_course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="coachId != null">coach_id,</if>
+            <if test="enrollDate != null">enroll_date,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="completedLessons != null">completed_lessons,</if>
+            <if test="totalLessons != null">total_lessons,</if>
+            <if test="progress != null">progress,</if>
+            <if test="status != null">status,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="coachId != null">#{coachId},</if>
+            <if test="enrollDate != null">#{enrollDate},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="completedLessons != null">#{completedLessons},</if>
+            <if test="totalLessons != null">#{totalLessons},</if>
+            <if test="progress != null">#{progress},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStudentCourseadmin" parameterType="StudentCourseadmin">
+        update student_course
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="coachId != null">coach_id = #{coachId},</if>
+            <if test="enrollDate != null">enroll_date = #{enrollDate},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="completedLessons != null">completed_lessons = #{completedLessons},</if>
+            <if test="totalLessons != null">total_lessons = #{totalLessons},</if>
+            <if test="progress != null">progress = #{progress},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStudentCourseadminById" parameterType="Long">
+        delete from student_course where id = #{id}
+    </delete>
+
+    <delete id="deleteStudentCourseadminByIds" parameterType="String">
+        delete from student_course where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

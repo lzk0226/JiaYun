@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.jiayun.mapper.ReservationadminMapper">
+    
+    <resultMap type="Reservationadmin" id="ReservationadminResult">
+        <result property="id"    column="id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="coachId"    column="coach_id"    />
+        <result property="vehicleId"    column="vehicle_id"    />
+        <result property="reservationDate"    column="reservation_date"    />
+        <result property="timeSlot"    column="time_slot"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="status"    column="status"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectReservationadminVo">
+        select id, student_id, coach_id, vehicle_id, reservation_date, time_slot, remarks, status, created_at, updated_at from reservation
+    </sql>
+
+    <select id="selectReservationadminList" parameterType="Reservationadmin" resultMap="ReservationadminResult">
+        <include refid="selectReservationadminVo"/>
+        <where>  
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="coachId != null "> and coach_id = #{coachId}</if>
+            <if test="vehicleId != null "> and vehicle_id = #{vehicleId}</if>
+            <if test="reservationDate != null "> and reservation_date = #{reservationDate}</if>
+            <if test="timeSlot != null  and timeSlot != ''"> and time_slot = #{timeSlot}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectReservationadminById" parameterType="Long" resultMap="ReservationadminResult">
+        <include refid="selectReservationadminVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertReservationadmin" parameterType="Reservationadmin" useGeneratedKeys="true" keyProperty="id">
+        insert into reservation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="coachId != null">coach_id,</if>
+            <if test="vehicleId != null">vehicle_id,</if>
+            <if test="reservationDate != null">reservation_date,</if>
+            <if test="timeSlot != null and timeSlot != ''">time_slot,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="status != null">status,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="coachId != null">#{coachId},</if>
+            <if test="vehicleId != null">#{vehicleId},</if>
+            <if test="reservationDate != null">#{reservationDate},</if>
+            <if test="timeSlot != null and timeSlot != ''">#{timeSlot},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateReservationadmin" parameterType="Reservationadmin">
+        update reservation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="coachId != null">coach_id = #{coachId},</if>
+            <if test="vehicleId != null">vehicle_id = #{vehicleId},</if>
+            <if test="reservationDate != null">reservation_date = #{reservationDate},</if>
+            <if test="timeSlot != null and timeSlot != ''">time_slot = #{timeSlot},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReservationadminById" parameterType="Long">
+        delete from reservation where id = #{id}
+    </delete>
+
+    <delete id="deleteReservationadminByIds" parameterType="String">
+        delete from reservation where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

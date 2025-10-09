@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.jiayun.mapper.StatisticsadminMapper">
+    
+    <resultMap type="Statisticsadmin" id="StatisticsadminResult">
+        <result property="id"    column="id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="completedLessons"    column="completed_lessons"    />
+        <result property="passedSubjects"    column="passed_subjects"    />
+        <result property="totalSubjects"    column="total_subjects"    />
+        <result property="reservationCount"    column="reservation_count"    />
+        <result property="overallProgress"    column="overall_progress"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectStatisticsadminVo">
+        select id, student_id, completed_lessons, passed_subjects, total_subjects, reservation_count, overall_progress, updated_at from statistics
+    </sql>
+
+    <select id="selectStatisticsadminList" parameterType="Statisticsadmin" resultMap="StatisticsadminResult">
+        <include refid="selectStatisticsadminVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="completedLessons != null "> and completed_lessons = #{completedLessons}</if>
+            <if test="passedSubjects != null "> and passed_subjects = #{passedSubjects}</if>
+            <if test="totalSubjects != null "> and total_subjects = #{totalSubjects}</if>
+            <if test="reservationCount != null "> and reservation_count = #{reservationCount}</if>
+            <if test="overallProgress != null "> and overall_progress = #{overallProgress}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectStatisticsadminById" parameterType="Long" resultMap="StatisticsadminResult">
+        <include refid="selectStatisticsadminVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStatisticsadmin" parameterType="Statisticsadmin" useGeneratedKeys="true" keyProperty="id">
+        insert into statistics
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="completedLessons != null">completed_lessons,</if>
+            <if test="passedSubjects != null">passed_subjects,</if>
+            <if test="totalSubjects != null">total_subjects,</if>
+            <if test="reservationCount != null">reservation_count,</if>
+            <if test="overallProgress != null">overall_progress,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="completedLessons != null">#{completedLessons},</if>
+            <if test="passedSubjects != null">#{passedSubjects},</if>
+            <if test="totalSubjects != null">#{totalSubjects},</if>
+            <if test="reservationCount != null">#{reservationCount},</if>
+            <if test="overallProgress != null">#{overallProgress},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStatisticsadmin" parameterType="Statisticsadmin">
+        update statistics
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="completedLessons != null">completed_lessons = #{completedLessons},</if>
+            <if test="passedSubjects != null">passed_subjects = #{passedSubjects},</if>
+            <if test="totalSubjects != null">total_subjects = #{totalSubjects},</if>
+            <if test="reservationCount != null">reservation_count = #{reservationCount},</if>
+            <if test="overallProgress != null">overall_progress = #{overallProgress},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStatisticsadminById" parameterType="Long">
+        delete from statistics where id = #{id}
+    </delete>
+
+    <delete id="deleteStatisticsadminByIds" parameterType="String">
+        delete from statistics where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

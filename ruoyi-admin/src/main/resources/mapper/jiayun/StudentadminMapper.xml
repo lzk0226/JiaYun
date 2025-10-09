@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.jiayun.mapper.StudentadminMapper">
+    
+    <resultMap type="Studentadmin" id="StudentadminResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="name"    column="name"    />
+        <result property="gender"    column="gender"    />
+        <result property="birthdate"    column="birthdate"    />
+        <result property="phone"    column="phone"    />
+        <result property="idcard"    column="idcard"    />
+        <result property="licenseType"    column="license_type"    />
+        <result property="address"    column="address"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="registerDate"    column="register_date"    />
+        <result property="password"    column="password"    />
+        <result property="status"    column="status"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectStudentadminVo">
+        select id, user_id, name, gender, birthdate, phone, idcard, license_type, address, avatar, register_date, password, status, created_at, updated_at from student
+    </sql>
+
+    <select id="selectStudentadminList" parameterType="Studentadmin" resultMap="StudentadminResult">
+        <include refid="selectStudentadminVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+            <if test="birthdate != null "> and birthdate = #{birthdate}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="idcard != null  and idcard != ''"> and idcard = #{idcard}</if>
+            <if test="licenseType != null  and licenseType != ''"> and license_type = #{licenseType}</if>
+            <if test="address != null  and address != ''"> and address like concat('%', #{address}, '%')</if>
+            <if test="avatar != null  and avatar != ''"> and avatar = #{avatar}</if>
+            <if test="registerDate != null "> and register_date = #{registerDate}</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectStudentadminById" parameterType="Long" resultMap="StudentadminResult">
+        <include refid="selectStudentadminVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStudentadmin" parameterType="Studentadmin" useGeneratedKeys="true" keyProperty="id">
+        insert into student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="gender != null">gender,</if>
+            <if test="birthdate != null">birthdate,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="idcard != null">idcard,</if>
+            <if test="licenseType != null">license_type,</if>
+            <if test="address != null">address,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="registerDate != null">register_date,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="status != null">status,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="birthdate != null">#{birthdate},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="idcard != null">#{idcard},</if>
+            <if test="licenseType != null">#{licenseType},</if>
+            <if test="address != null">#{address},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="registerDate != null">#{registerDate},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStudentadmin" parameterType="Studentadmin">
+        update student
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="birthdate != null">birthdate = #{birthdate},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="idcard != null">idcard = #{idcard},</if>
+            <if test="licenseType != null">license_type = #{licenseType},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="registerDate != null">register_date = #{registerDate},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStudentadminById" parameterType="Long">
+        delete from student where id = #{id}
+    </delete>
+
+    <delete id="deleteStudentadminByIds" parameterType="String">
+        delete from student where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

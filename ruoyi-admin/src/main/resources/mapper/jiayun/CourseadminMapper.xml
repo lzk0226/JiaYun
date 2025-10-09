@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.jiayun.mapper.CourseadminMapper">
+    
+    <resultMap type="Courseadmin" id="CourseadminResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="subjectId"    column="subject_id"    />
+        <result property="type"    column="type"    />
+        <result property="subtitle"    column="subtitle"    />
+        <result property="badge"    column="badge"    />
+        <result property="duration"    column="duration"    />
+        <result property="period"    column="period"    />
+        <result property="features"    column="features"    />
+        <result property="price"    column="price"    />
+        <result property="popular"    column="popular"    />
+        <result property="studentsCount"    column="students_count"    />
+        <result property="isCombined"    column="is_combined"    />
+        <result property="status"    column="status"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectCourseadminVo">
+        select id, name, subject_id, type, subtitle, badge, duration, period, features, price, popular, students_count, is_combined, status, created_at, updated_at from course
+    </sql>
+
+    <select id="selectCourseadminList" parameterType="Courseadmin" resultMap="CourseadminResult">
+        <include refid="selectCourseadminVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="subjectId != null "> and subject_id = #{subjectId}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="subtitle != null  and subtitle != ''"> and subtitle = #{subtitle}</if>
+            <if test="badge != null  and badge != ''"> and badge like concat('%', #{badge}, '%')</if>
+            <if test="duration != null "> and duration = #{duration}</if>
+            <if test="period != null  and period != ''"> and period like concat('%', #{period}, '%')</if>
+            <if test="features != null  and features != ''"> and features like concat('%', #{features}, '%')</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="popular != null "> and popular = #{popular}</if>
+            <if test="studentsCount != null "> and students_count = #{studentsCount}</if>
+            <if test="isCombined != null "> and is_combined = #{isCombined}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectCourseadminById" parameterType="Long" resultMap="CourseadminResult">
+        <include refid="selectCourseadminVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCourseadmin" parameterType="Courseadmin" useGeneratedKeys="true" keyProperty="id">
+        insert into course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="subjectId != null">subject_id,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="subtitle != null">subtitle,</if>
+            <if test="badge != null">badge,</if>
+            <if test="duration != null">duration,</if>
+            <if test="period != null">period,</if>
+            <if test="features != null">features,</if>
+            <if test="price != null">price,</if>
+            <if test="popular != null">popular,</if>
+            <if test="studentsCount != null">students_count,</if>
+            <if test="isCombined != null">is_combined,</if>
+            <if test="status != null">status,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="subjectId != null">#{subjectId},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="subtitle != null">#{subtitle},</if>
+            <if test="badge != null">#{badge},</if>
+            <if test="duration != null">#{duration},</if>
+            <if test="period != null">#{period},</if>
+            <if test="features != null">#{features},</if>
+            <if test="price != null">#{price},</if>
+            <if test="popular != null">#{popular},</if>
+            <if test="studentsCount != null">#{studentsCount},</if>
+            <if test="isCombined != null">#{isCombined},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCourseadmin" parameterType="Courseadmin">
+        update course
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="subjectId != null">subject_id = #{subjectId},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="subtitle != null">subtitle = #{subtitle},</if>
+            <if test="badge != null">badge = #{badge},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="period != null">period = #{period},</if>
+            <if test="features != null">features = #{features},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="popular != null">popular = #{popular},</if>
+            <if test="studentsCount != null">students_count = #{studentsCount},</if>
+            <if test="isCombined != null">is_combined = #{isCombined},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCourseadminById" parameterType="Long">
+        delete from course where id = #{id}
+    </delete>
+
+    <delete id="deleteCourseadminByIds" parameterType="String">
+        delete from course where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

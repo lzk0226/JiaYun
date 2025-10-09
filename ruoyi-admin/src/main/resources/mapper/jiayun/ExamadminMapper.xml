@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.jiayun.mapper.ExamadminMapper">
+    
+    <resultMap type="Examadmin" id="ExamadminResult">
+        <result property="id"    column="id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="subjectId"    column="subject_id"    />
+        <result property="title"    column="title"    />
+        <result property="examPlace"    column="exam_place"    />
+        <result property="examTime"    column="exam_time"    />
+        <result property="score"    column="score"    />
+        <result property="status"    column="status"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectExamadminVo">
+        select id, student_id, subject_id, title, exam_place, exam_time, score, status, created_at, updated_at from exam
+    </sql>
+
+    <select id="selectExamadminList" parameterType="Examadmin" resultMap="ExamadminResult">
+        <include refid="selectExamadminVo"/>
+        <where>  
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="subjectId != null "> and subject_id = #{subjectId}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="examPlace != null  and examPlace != ''"> and exam_place like concat('%', #{examPlace}, '%')</if>
+            <if test="examTime != null "> and exam_time = #{examTime}</if>
+            <if test="score != null "> and score = #{score}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectExamadminById" parameterType="Long" resultMap="ExamadminResult">
+        <include refid="selectExamadminVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertExamadmin" parameterType="Examadmin" useGeneratedKeys="true" keyProperty="id">
+        insert into exam
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="subjectId != null">subject_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="examPlace != null and examPlace != ''">exam_place,</if>
+            <if test="examTime != null">exam_time,</if>
+            <if test="score != null">score,</if>
+            <if test="status != null">status,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="subjectId != null">#{subjectId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="examPlace != null and examPlace != ''">#{examPlace},</if>
+            <if test="examTime != null">#{examTime},</if>
+            <if test="score != null">#{score},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExamadmin" parameterType="Examadmin">
+        update exam
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="subjectId != null">subject_id = #{subjectId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="examPlace != null and examPlace != ''">exam_place = #{examPlace},</if>
+            <if test="examTime != null">exam_time = #{examTime},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteExamadminById" parameterType="Long">
+        delete from exam where id = #{id}
+    </delete>
+
+    <delete id="deleteExamadminByIds" parameterType="String">
+        delete from exam where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

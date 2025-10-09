@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.jiayun.mapper.VehicleadminMapper">
+    
+    <resultMap type="Vehicleadmin" id="VehicleadminResult">
+        <result property="id"    column="id"    />
+        <result property="plateNumber"    column="plate_number"    />
+        <result property="model"    column="model"    />
+        <result property="vehicleImage"    column="vehicle_image"    />
+        <result property="status"    column="status"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectVehicleadminVo">
+        select id, plate_number, model, vehicle_image, status, created_at, updated_at from vehicle
+    </sql>
+
+    <select id="selectVehicleadminList" parameterType="Vehicleadmin" resultMap="VehicleadminResult">
+        <include refid="selectVehicleadminVo"/>
+        <where>  
+            <if test="plateNumber != null  and plateNumber != ''"> and plate_number = #{plateNumber}</if>
+            <if test="model != null  and model != ''"> and model = #{model}</if>
+            <if test="vehicleImage != null  and vehicleImage != ''"> and vehicle_image = #{vehicleImage}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectVehicleadminById" parameterType="Long" resultMap="VehicleadminResult">
+        <include refid="selectVehicleadminVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertVehicleadmin" parameterType="Vehicleadmin" useGeneratedKeys="true" keyProperty="id">
+        insert into vehicle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="plateNumber != null and plateNumber != ''">plate_number,</if>
+            <if test="model != null">model,</if>
+            <if test="vehicleImage != null">vehicle_image,</if>
+            <if test="status != null">status,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="plateNumber != null and plateNumber != ''">#{plateNumber},</if>
+            <if test="model != null">#{model},</if>
+            <if test="vehicleImage != null">#{vehicleImage},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVehicleadmin" parameterType="Vehicleadmin">
+        update vehicle
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="plateNumber != null and plateNumber != ''">plate_number = #{plateNumber},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="vehicleImage != null">vehicle_image = #{vehicleImage},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVehicleadminById" parameterType="Long">
+        delete from vehicle where id = #{id}
+    </delete>
+
+    <delete id="deleteVehicleadminByIds" parameterType="String">
+        delete from vehicle where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

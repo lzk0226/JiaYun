@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.jiayun.mapper.LearningProgressadminMapper">
+    
+    <resultMap type="LearningProgressadmin" id="LearningProgressadminResult">
+        <result property="id"    column="id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="subjectId"    column="subject_id"    />
+        <result property="completedLessons"    column="completed_lessons"    />
+        <result property="progressPercent"    column="progress_percent"    />
+        <result property="status"    column="status"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectLearningProgressadminVo">
+        select id, student_id, subject_id, completed_lessons, progress_percent, status, created_at, updated_at from learning_progress
+    </sql>
+
+    <select id="selectLearningProgressadminList" parameterType="LearningProgressadmin" resultMap="LearningProgressadminResult">
+        <include refid="selectLearningProgressadminVo"/>
+        <where>  
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="subjectId != null "> and subject_id = #{subjectId}</if>
+            <if test="completedLessons != null  and completedLessons != ''"> and completed_lessons = #{completedLessons}</if>
+            <if test="progressPercent != null "> and progress_percent = #{progressPercent}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectLearningProgressadminById" parameterType="Long" resultMap="LearningProgressadminResult">
+        <include refid="selectLearningProgressadminVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertLearningProgressadmin" parameterType="LearningProgressadmin" useGeneratedKeys="true" keyProperty="id">
+        insert into learning_progress
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="subjectId != null">subject_id,</if>
+            <if test="completedLessons != null">completed_lessons,</if>
+            <if test="progressPercent != null">progress_percent,</if>
+            <if test="status != null">status,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="subjectId != null">#{subjectId},</if>
+            <if test="completedLessons != null">#{completedLessons},</if>
+            <if test="progressPercent != null">#{progressPercent},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLearningProgressadmin" parameterType="LearningProgressadmin">
+        update learning_progress
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="subjectId != null">subject_id = #{subjectId},</if>
+            <if test="completedLessons != null">completed_lessons = #{completedLessons},</if>
+            <if test="progressPercent != null">progress_percent = #{progressPercent},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLearningProgressadminById" parameterType="Long">
+        delete from learning_progress where id = #{id}
+    </delete>
+
+    <delete id="deleteLearningProgressadminByIds" parameterType="String">
+        delete from learning_progress where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
