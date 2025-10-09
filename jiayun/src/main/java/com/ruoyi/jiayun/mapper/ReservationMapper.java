@@ -131,7 +131,24 @@ public interface ReservationMapper {
     /**
      * 根据ID查询预约记录（不含关联）
      */
-    @Select("SELECT * FROM reservation WHERE id = #{id}")
+    /**
+     * 根据ID查询预约记录（不含关联）
+     */
+    @Select("SELECT id, student_id, coach_id, vehicle_id, reservation_date, " +
+            "time_slot, remarks, status, created_at, updated_at " +
+            "FROM reservation WHERE id = #{id}")
+    @Results({
+            @Result(property = "id", column = "id"),
+            @Result(property = "studentId", column = "student_id"),
+            @Result(property = "coachId", column = "coach_id"),
+            @Result(property = "vehicleId", column = "vehicle_id"),
+            @Result(property = "reservationDate", column = "reservation_date"),
+            @Result(property = "timeSlot", column = "time_slot"),
+            @Result(property = "remarks", column = "remarks"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "created_at", column = "created_at"),
+            @Result(property = "updated_at", column = "updated_at")
+    })
     Reservation selectReservationById(@Param("id") Long id);
 
     /**
