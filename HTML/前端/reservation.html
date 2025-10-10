@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>车辆预约 - 驾云</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/reservation.css">
+</head>
+
+<body>
+  <!-- 导航栏 -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- 主内容 -->
+  <main>
+    <!-- 预约表单 -->
+    <section class="booking-form-section">
+      <div class="section-header">
+        <i class="fas fa-calendar-plus"></i>
+        <h2>新建预约</h2>
+      </div>
+
+      <form id="bookingForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>预约日期</label>
+            <input type="date" id="bookingDate" required>
+          </div>
+          <div class="form-group">
+            <label>选择教练</label>
+            <select id="coachSelect" required>
+              <option value="">请选择教练</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>选择时段</label>
+          <div class="time-grid" id="timeGrid"></div>
+        </div>
+
+        <div class="form-group">
+          <label>选择车辆</label>
+          <div class="vehicle-grid" id="vehicleGrid"></div>
+        </div>
+
+        <div class="form-group">
+          <label>备注信息(可选)</label>
+          <input type="text" id="remarks" placeholder="请输入备注信息">
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-check"></i> 确认预约
+        </button>
+      </form>
+    </section>
+
+    <!-- 历史记录 -->
+    <section class="history-section">
+      <div class="section-header">
+        <i class="fas fa-history"></i>
+        <h2>预约记录</h2>
+      </div>
+
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">全部</button>
+        <button class="filter-tab" data-filter="upcoming">即将开始</button>
+        <button class="filter-tab" data-filter="completed">已完成</button>
+        <button class="filter-tab" data-filter="cancelled">已取消</button>
+      </div>
+
+      <div class="history-list" id="historyList"></div>
+    </section>
+  </main>
+
+  <script src="js/reservation.js"></script>
+</body>
+
+</html>

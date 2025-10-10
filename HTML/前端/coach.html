@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教练选择 - 驾云</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/coach.css">
+</head>
+
+<body>
+  <!-- 导航栏 -->
+  <div id="navbar-placeholder"></div>
+  <!-- 主内容 -->
+  <main>
+    <!-- 筛选栏 -->
+    <section class="filter-section">
+      <div class="filter-row">
+        <div class="filter-group">
+          <label>教练等级</label>
+          <select id="levelFilter">
+            <option value="">全部等级</option>
+            <option value="gold">金牌教练</option>
+            <option value="excellent">优秀教练</option>
+            <option value="normal">普通教练</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>教学科目</label>
+          <select id="subjectFilter">
+            <option value="">全部科目</option>
+            <option value="subject1">科目一</option>
+            <option value="subject2">科目二</option>
+            <option value="subject3">科目三</option>
+            <option value="subject4">科目四</option>
+            <option value="all">科目二三</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>排序方式</label>
+          <select id="sortFilter">
+            <option value="rating">评分最高</option>
+            <option value="students">学员最多</option>
+            <option value="experience">教龄最长</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <button class="filter-btn" onclick="applyFilters()">
+            <i class="fas fa-search"></i> 筛选
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 教练列表 -->
+    <section class="coaches-grid" id="coachesGrid">
+      <!-- 教练卡片将通过JavaScript动态生成 -->
+    </section>
+  </main>
+
+  <!-- 教练详情模态框 -->
+  <div class="modal" id="coachModal">
+    <div class="modal-content">
+      <!-- 移除头像元素 modal-avatar -->
+      <div class="modal-header" id="modalHeader">
+        <button class="modal-close" onclick="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-header-text">
+          <h2 id="modalName"></h2>
+          <p id="modalTitle"></p>
+        </div>
+      </div>
+
+
+      <div class="modal-body">
+        <div class="info-section">
+          <h3 class="section-title">
+            <i class="fas fa-user"></i>
+            基本信息
+          </h3>
+          <div class="info-item">
+            <i class="fas fa-clock"></i>
+            <div class="info-content">
+              <div class="info-label">教学经验</div>
+              <div class="info-value" id="modalExperience"></div>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-graduation-cap"></i>
+            <div class="info-content">
+              <div class="info-label">培训学员</div>
+              <div class="info-value" id="modalStudents"></div>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-car"></i>
+            <div class="info-content">
+              <div class="info-label">教学科目</div>
+              <div class="info-value" id="modalSubjects"></div>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-certificate"></i>
+            <div class="info-content">
+              <div class="info-label">通过率</div>
+              <div class="info-value" id="modalPassRate"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h3 class="section-title">
+            <i class="fas fa-info-circle"></i>
+            教练简介
+          </h3>
+          <p id="modalDescription" style="color: #475569; line-height: 1.8;"></p>
+        </div>
+
+        <div class="info-section">
+          <h3 class="section-title">
+            <i class="fas fa-star"></i>
+            学员评价
+          </h3>
+          <div class="reviews-list" id="modalReviews">
+            <!-- 评价列表 -->
+          </div>
+        </div>
+
+        <div class="coach-actions">
+          <button class="btn-secondary" onclick="closeModal()">返回</button>
+          <button class="btn-primary" onclick="selectCoach()">
+            <i class="fas fa-check"></i> 选择此教练
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <script src="js/modal.js"></script> -->
+  <script src="js/coach.js"></script>
+</body>
+
+</html>

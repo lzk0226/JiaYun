@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>课程选择 - 驾云</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/course.css">
+</head>
+
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <main>
+    <div class="filter-bar">
+      <select id="subjectFilter" onchange="filterCourses()">
+        <option value="">全部科目</option>
+        <option value="subject1">科目一</option>
+        <option value="subject2">科目二</option>
+        <option value="subject3">科目三</option>
+        <option value="subject4">科目四</option>
+        <option value="all">科目二三联报</option>
+      </select>
+      <select id="typeFilter" onchange="filterCourses()">
+        <option value="">全部类型</option>
+        <option value="standard">标准班</option>
+        <option value="vip">VIP班</option>
+        <option value="intensive">速成班</option>
+      </select>
+      <select id="sortFilter" onchange="filterCourses()">
+        <option value="default">默认排序</option>
+        <option value="price-asc">价格从低到高</option>
+        <option value="price-desc">价格从高到低</option>
+        <option value="popular">最受欢迎</option>
+      </select>
+    </div>
+    <div class="courses-grid" id="coursesGrid"></div>
+  </main>
+  <script src="js/modal.js"></script>
+  <script src="js/course.js"></script>
+</body>
+
+</html>

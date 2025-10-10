@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人中心 - 驾云</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/profile.css">
+</head>
+
+<body>
+  <div id="navbar-placeholder"></div>
+
+  <main>
+    <div class="profile-header">
+      <div class="avatar-section">
+        <img src="" alt="头像" class="avatar" id="avatarImg">
+        <div class="avatar-upload" onclick="alert('上传头像功能')">
+          <i class="fas fa-camera"></i>
+        </div>
+      </div>
+      <div class="profile-info">
+        <h2 id="userName"></h2>
+        <div class="profile-meta">
+          <div class="meta-item" id="userId"></div>
+          <div class="meta-item" id="registerDate"></div>
+          <div class="meta-item" id="license"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-tabs">
+      <button class="tab-btn active" onclick="switchTab('info')">
+        <i class="fas fa-user"></i> 个人信息
+      </button>
+      <button class="tab-btn" onclick="switchTab('progress')">
+        <i class="fas fa-chart-line"></i> 学习进度
+      </button>
+      <button class="tab-btn" onclick="switchTab('courses')">
+        <i class="fas fa-book"></i> 我的课程
+      </button>
+      <button class="tab-btn" onclick="switchTab('exams')">
+        <i class="fas fa-clipboard-check"></i> 考试安排
+      </button>
+    </div>
+
+    <!-- 个人信息 -->
+    <div id="info" class="tab-content active"></div>
+
+    <!-- 学习进度 -->
+    <div id="progress" class="tab-content"></div>
+
+    <!-- 我的课程 -->
+    <div id="courses" class="tab-content"></div>
+
+    <!-- 考试安排 -->
+    <div id="exams" class="tab-content"></div>
+  </main>
+  <script src="js/profile.js"></script>
+</body>
+
+</html>

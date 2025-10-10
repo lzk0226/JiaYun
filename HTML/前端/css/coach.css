@@ -1,0 +1,837 @@
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+
+    /* 主内容区域 */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 2rem 2rem;
+    }
+
+    /* 筛选栏 */
+    .filter-section {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      align-items: end;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-group label {
+      color: #475569;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .filter-group select,
+    .filter-group input {
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .filter-group select:focus,
+    .filter-group input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .filter-btn {
+      padding: 0.75rem 1.5rem;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    /* 教练卡片网格 */
+    .coaches-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .coach-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .coach-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .coach-header {
+      position: relative;
+      height: 200px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      overflow: hidden;
+    }
+
+    .coach-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 5px solid white;
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      object-fit: cover;
+      background: white;
+    }
+
+    .coach-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255, 255, 255, 0.95);
+      color: #f59e0b;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .coach-body {
+      padding: 4rem 1.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .coach-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 0.25rem;
+    }
+
+    .coach-title {
+      color: #64748b;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .coach-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem 0;
+      border-top: 1px solid #f1f5f9;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #3b82f6;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 0.25rem;
+    }
+
+    .coach-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .feature-tag {
+      background: #f0f9ff;
+      color: #0284c7;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .coach-rating {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stars {
+      color: #fbbf24;
+      font-size: 1.1rem;
+    }
+
+    .rating-count {
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .coach-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    /* 教练详情模态框 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+
+      /* 隐藏滚动条 */
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* IE 10+ */
+    }
+
+    .modal-content::-webkit-scrollbar {
+      width: 0;
+      /* Chrome/Safari/Webkit */
+      background: transparent;
+    }
+
+
+    /* 教练详情模态框头部背景改为图片占满 */
+    .modal-header {
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 6rem 2rem 3rem;
+      /* 顶部空间更大，让背景图显示更大 */
+      text-align: center;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      min-height: 300px;
+      /* 保证背景图高度足够 */
+    }
+
+    /* 移除头像相关样式 */
+    .modal-avatar {
+      display: none;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .modal-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid white;
+      margin-bottom: 1rem;
+      object-fit: cover;
+      background: white;
+    }
+
+    .modal-body {
+      padding: 2rem;
+    }
+
+    .info-section {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-title i {
+      color: #3b82f6;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: start;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-item i {
+      color: #94a3b8;
+      margin-top: 0.25rem;
+    }
+
+    .info-content {
+      flex: 1;
+    }
+
+    .info-label {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+      color: #1e293b;
+      font-weight: 500;
+    }
+
+    .reviews-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .review-item {
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .reviewer-name {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .review-date {
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .review-stars {
+      color: #fbbf24;
+      margin-bottom: 0.5rem;
+    }
+
+    .review-text {
+      color: #475569;
+      line-height: 1.6;
+    }
+
+    /* 空状态 */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #94a3b8;
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+
+    .empty-state p {
+      font-size: 1.1rem;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .filter-row {
+        grid-template-columns: 1fr;
+      }
+
+      .coaches-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        margin: 0;
+        border-radius: 0;
+        max-height: 100vh;
+      }
+    }
+
+    /* ========== 课程选择模态框样式 ========== */
+    .custom-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      padding: 20px;
+    }
+
+    .custom-modal-overlay.active {
+      opacity: 1;
+    }
+
+    .custom-modal-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .custom-modal-overlay.active .custom-modal-content {
+      transform: scale(1);
+    }
+
+    .custom-modal-header {
+      padding: 24px;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .custom-modal-header h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .custom-modal-close {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      font-size: 18px;
+    }
+
+    .custom-modal-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(90deg);
+    }
+
+    .custom-modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* 选中的教练信息 */
+    .selected-coach-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      background: linear-gradient(135deg, #f6f9fc 0%, #e9f2fa 100%);
+      border-radius: 12px;
+      margin-bottom: 24px;
+      border: 2px solid #e0e7ff;
+    }
+
+    .selected-coach-info img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .coach-info-text h4 {
+      margin: 0 0 4px 0;
+      font-size: 18px;
+      color: #1e293b;
+      font-weight: 600;
+    }
+
+    .coach-info-text p {
+      margin: 0;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    /* 课程选择列表 */
+    .course-selection-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .selection-tip {
+      color: #64748b;
+      font-size: 14px;
+      margin: 0 0 12px 0;
+      font-weight: 500;
+    }
+
+    .course-selection-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      gap: 16px;
+    }
+
+    .course-selection-item:hover {
+      border-color: #3b82f6;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .course-item-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .course-item-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .course-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .course-item-info h5 {
+      margin: 0 0 6px 0;
+      font-size: 16px;
+      color: #1e293b;
+      font-weight: 600;
+    }
+
+    .course-item-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 0;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .course-item-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .course-item-meta i {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    .course-progress {
+      color: #10b981 !important;
+      font-weight: 600;
+    }
+
+    .btn-select-course {
+      padding: 10px 24px;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+
+    .btn-select-course:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-select-course:active {
+      transform: translateY(0);
+    }
+
+    /* ========== 自定义提示框样式 ========== */
+    .custom-alert {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: white;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      z-index: 100000;
+      opacity: 0;
+      transition: all 0.3s ease;
+      min-width: 300px;
+      max-width: 500px;
+    }
+
+    .custom-alert.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .custom-alert-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .custom-alert-content i {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .custom-alert-content p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #1e293b;
+    }
+
+    .custom-alert.success {
+      border-left: 4px solid #10b981;
+    }
+
+    .custom-alert.success i {
+      color: #10b981;
+    }
+
+    .custom-alert.error {
+      border-left: 4px solid #ef4444;
+    }
+
+    .custom-alert.error i {
+      color: #ef4444;
+    }
+
+    .custom-alert.warning {
+      border-left: 4px solid #f59e0b;
+    }
+
+    .custom-alert.warning i {
+      color: #f59e0b;
+    }
+
+    .custom-alert.info {
+      border-left: 4px solid #3b82f6;
+    }
+
+    .custom-alert.info i {
+      color: #3b82f6;
+    }
+
+    /* ========== 响应式设计 ========== */
+    @media (max-width: 768px) {
+      .custom-modal-content {
+        max-width: 100%;
+        max-height: 90vh;
+        margin: 10px;
+      }
+
+      .custom-modal-header {
+        padding: 20px;
+      }
+
+      .custom-modal-header h3 {
+        font-size: 18px;
+      }
+
+      .custom-modal-body {
+        padding: 20px;
+      }
+
+      .selected-coach-info {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .course-selection-item {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn-select-course {
+        width: 100%;
+      }
+
+      .custom-alert {
+        min-width: auto;
+        max-width: calc(100% - 40px);
+        left: 20px;
+        right: 20px;
+        transform: translateY(-20px);
+      }
+
+      .custom-alert.show {
+        transform: translateY(0);
+      }
+    }
+
+    /* ========== 滚动条样式 ========== */
+    .custom-modal-body::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .custom-modal-body::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 3px;
+    }
+
+    .custom-modal-body::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+
+    .custom-modal-body::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
