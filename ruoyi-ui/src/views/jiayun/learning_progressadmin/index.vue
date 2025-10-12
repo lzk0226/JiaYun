@@ -109,16 +109,6 @@
       <el-table-column label="已完成课时" align="center" prop="completedLessons" />
       <el-table-column label="进度百分比" align="center" prop="progressPercent" />
       <el-table-column label="状态" align="center" prop="status" />
-<!--      <el-table-column label="${comment}" align="center" prop="createdAt" width="180">-->
-<!--        <template slot-scope="scope">-->
-<!--          <span>{{ parseTime(scope.row.createdAt, '{y}-{m}-{d}') }}</span>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-<!--      <el-table-column label="${comment}" align="center" prop="updatedAt" width="180">-->
-<!--        <template slot-scope="scope">-->
-<!--          <span>{{ parseTime(scope.row.updatedAt, '{y}-{m}-{d}') }}</span>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -165,14 +155,6 @@
         <el-form-item label="${comment}" prop="createdAt">
           <el-date-picker clearable
             v-model="form.createdAt"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择${comment}">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="${comment}" prop="updatedAt">
-          <el-date-picker clearable
-            v-model="form.updatedAt"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="请选择${comment}">

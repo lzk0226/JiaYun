@@ -1,17 +1,18 @@
 package com.ruoyi.jiayun.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
 
 /**
  * 预约记录对象 reservation
  * 
  * @author ruoyi
- * @date 2025-10-09
+ * @date 2025-10-12
  */
 public class Reservationadmin extends BaseEntity
 {
@@ -27,6 +28,10 @@ public class Reservationadmin extends BaseEntity
     /** 教练ID */
     @Excel(name = "教练ID")
     private Long coachId;
+
+    /** 科目ID */
+    @Excel(name = "科目ID")
+    private Long subjectId;
 
     /** 车辆ID */
     @Excel(name = "车辆ID")
@@ -50,11 +55,9 @@ public class Reservationadmin extends BaseEntity
     private String status;
 
     /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Date createdAt;
 
     /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Date updatedAt;
 
     public void setId(Long id) 
@@ -85,6 +88,16 @@ public class Reservationadmin extends BaseEntity
     public Long getCoachId() 
     {
         return coachId;
+    }
+
+    public void setSubjectId(Long subjectId) 
+    {
+        this.subjectId = subjectId;
+    }
+
+    public Long getSubjectId() 
+    {
+        return subjectId;
     }
 
     public void setVehicleId(Long vehicleId) 
@@ -163,6 +176,7 @@ public class Reservationadmin extends BaseEntity
             .append("id", getId())
             .append("studentId", getStudentId())
             .append("coachId", getCoachId())
+            .append("subjectId", getSubjectId())
             .append("vehicleId", getVehicleId())
             .append("reservationDate", getReservationDate())
             .append("timeSlot", getTimeSlot())

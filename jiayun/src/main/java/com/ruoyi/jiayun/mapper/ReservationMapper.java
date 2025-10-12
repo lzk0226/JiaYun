@@ -12,10 +12,36 @@ import java.util.List;
 public interface ReservationMapper {
 
     /**
-     * 获取所有在职教练
+     * 获取学员在指定科目下的教练（基于已报名课程）
      */
-    @Select("SELECT id, name, title, badge, level FROM coach WHERE status = 1 ORDER BY level DESC, rating DESC")
-    List<Coach> selectAvailableCoaches();
+    @Select("SELECT DISTINCT c.id, c.name, c.title, c.badge, c.level, c.rating " +
+            "FROM coach c " +
+            "JOIN student_course sc ON c.id = sc.coach_id " +
+            "JOIN course co ON sc.course_id = co.id " +
+            "WHERE sc.student_id = #{studentId} " +
+            "AND sc.status = 'ongoing' " +
+            "AND c.status = 1 " +
+            "AND (co.subject_id = #{subjectId} OR EXISTS (" +
+            "  SELECT 1 FROM course_subject cs " +
+            "  WHERE cs.course_id = co.id AND cs.subject_id = #{subjectId}" +
+            ")) " +
+            "LIMIT 1")
+    Coach selectStudentCoachBySubject(@Param("studentId") Long studentId,
+                                      @Param("subjectId") Integer subjectId);
+
+    /**
+     * 检查学员是否已报名该科目的课程
+     */
+    @Select("SELECT COUNT(*) FROM student_course sc " +
+            "JOIN course c ON sc.course_id = c.id " +
+            "WHERE sc.student_id = #{studentId} " +
+            "AND sc.status = 'ongoing' " +
+            "AND (c.subject_id = #{subjectId} OR EXISTS (" +
+            "  SELECT 1 FROM course_subject cs " +
+            "  WHERE cs.course_id = c.id AND cs.subject_id = #{subjectId}" +
+            "))")
+    int checkStudentEnrolledSubject(@Param("studentId") Long studentId,
+                                    @Param("subjectId") Integer subjectId);
 
     /**
      * 获取指定日期和教练已预约的时段
@@ -79,8 +105,8 @@ public interface ReservationMapper {
     /**
      * 插入预约记录
      */
-    @Insert("INSERT INTO reservation(student_id, coach_id, vehicle_id, reservation_date, time_slot, remarks, status) " +
-            "VALUES(#{studentId}, #{coachId}, #{vehicleId}, #{reservationDate}, #{timeSlot}, #{remarks}, #{status})")
+    @Insert("INSERT INTO reservation(student_id, coach_id, vehicle_id, subject_id, reservation_date, time_slot, remarks, status) " +
+            "VALUES(#{studentId}, #{coachId}, #{vehicleId}, #{subjectId}, #{reservationDate}, #{timeSlot}, #{remarks}, #{status})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertReservation(Reservation reservation);
 
@@ -88,8 +114,8 @@ public interface ReservationMapper {
      * 查询学员的预约记录
      */
     @Select("<script>" +
-            "SELECT r.id, r.student_id, r.coach_id, r.vehicle_id, r.reservation_date, " +
-            "r.time_slot, r.remarks, r.status, r.created_at, r.updated_at " +
+            "SELECT r.id, r.student_id, r.coach_id, r.vehicle_id, r.subject_id, r.reservation_date, " +
+            "r.time_slot, r.remarks, r.status " +
             "FROM reservation r " +
             "WHERE r.student_id = #{studentId} " +
             "<if test='status != null and status != \"\"'>" +
@@ -102,12 +128,11 @@ public interface ReservationMapper {
             @Result(property = "studentId", column = "student_id"),
             @Result(property = "coachId", column = "coach_id"),
             @Result(property = "vehicleId", column = "vehicle_id"),
+            @Result(property = "subjectId", column = "subject_id"),
             @Result(property = "reservationDate", column = "reservation_date"),
             @Result(property = "timeSlot", column = "time_slot"),
             @Result(property = "remarks", column = "remarks"),
             @Result(property = "status", column = "status"),
-            @Result(property = "created_at", column = "created_at"),
-            @Result(property = "updated_at", column = "updated_at"),
             @Result(property = "coach", column = "coach_id",
                     one = @One(select = "selectCoachById")),
             @Result(property = "vehicle", column = "vehicle_id",
@@ -131,31 +156,27 @@ public interface ReservationMapper {
     /**
      * 根据ID查询预约记录（不含关联）
      */
-    /**
-     * 根据ID查询预约记录（不含关联）
-     */
-    @Select("SELECT id, student_id, coach_id, vehicle_id, reservation_date, " +
-            "time_slot, remarks, status, created_at, updated_at " +
+    @Select("SELECT id, student_id, coach_id, vehicle_id, subject_id, reservation_date, " +
+            "time_slot, remarks, status " +
             "FROM reservation WHERE id = #{id}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "studentId", column = "student_id"),
             @Result(property = "coachId", column = "coach_id"),
             @Result(property = "vehicleId", column = "vehicle_id"),
+            @Result(property = "subjectId", column = "subject_id"),
             @Result(property = "reservationDate", column = "reservation_date"),
             @Result(property = "timeSlot", column = "time_slot"),
             @Result(property = "remarks", column = "remarks"),
-            @Result(property = "status", column = "status"),
-            @Result(property = "created_at", column = "created_at"),
-            @Result(property = "updated_at", column = "updated_at")
+            @Result(property = "status", column = "status")
     })
     Reservation selectReservationById(@Param("id") Long id);
 
     /**
      * 查询预约详情（含关联信息）
      */
-    @Select("SELECT r.id, r.student_id, r.coach_id, r.vehicle_id, r.reservation_date, " +
-            "r.time_slot, r.remarks, r.status, r.created_at, r.updated_at " +
+    @Select("SELECT r.id, r.student_id, r.coach_id, r.vehicle_id, r.subject_id, r.reservation_date, " +
+            "r.time_slot, r.remarks, r.status " +
             "FROM reservation r " +
             "WHERE r.id = #{id}")
     @Results({
@@ -163,12 +184,11 @@ public interface ReservationMapper {
             @Result(property = "studentId", column = "student_id"),
             @Result(property = "coachId", column = "coach_id"),
             @Result(property = "vehicleId", column = "vehicle_id"),
+            @Result(property = "subjectId", column = "subject_id"),
             @Result(property = "reservationDate", column = "reservation_date"),
             @Result(property = "timeSlot", column = "time_slot"),
             @Result(property = "remarks", column = "remarks"),
             @Result(property = "status", column = "status"),
-            @Result(property = "created_at", column = "created_at"),
-            @Result(property = "updated_at", column = "updated_at"),
             @Result(property = "coach", column = "coach_id",
                     one = @One(select = "selectCoachById")),
             @Result(property = "vehicle", column = "vehicle_id",
@@ -179,7 +199,7 @@ public interface ReservationMapper {
     /**
      * 更新预约状态
      */
-    @Update("UPDATE reservation SET status = #{status}, updated_at = NOW() WHERE id = #{id}")
+    @Update("UPDATE reservation SET status = #{status} WHERE id = #{id}")
     int updateReservationStatus(@Param("id") Long id, @Param("status") String status);
 
     /**

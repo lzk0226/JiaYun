@@ -57,14 +57,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-<!--      <el-form-item label="${comment}" prop="updatedAt">-->
-<!--        <el-date-picker clearable-->
-<!--          v-model="queryParams.updatedAt"-->
-<!--          type="date"-->
-<!--          value-format="yyyy-MM-dd"-->
-<!--          placeholder="请选择${comment}">-->
-<!--        </el-date-picker>-->
-<!--      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -126,11 +118,6 @@
       <el-table-column label="总科目数" align="center" prop="totalSubjects" />
       <el-table-column label="预约次数" align="center" prop="reservationCount" />
       <el-table-column label="整体进度" align="center" prop="overallProgress" />
-<!--      <el-table-column label="${comment}" align="center" prop="updatedAt" width="180">-->
-<!--        <template slot-scope="scope">-->
-<!--          <span>{{ parseTime(scope.row.updatedAt, '{y}-{m}-{d}') }}</span>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -179,14 +166,6 @@
         </el-form-item>
         <el-form-item label="整体进度" prop="overallProgress">
           <el-input v-model="form.overallProgress" placeholder="请输入整体进度" />
-        </el-form-item>
-        <el-form-item label="${comment}" prop="updatedAt">
-          <el-date-picker clearable
-            v-model="form.updatedAt"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择${comment}">
-          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

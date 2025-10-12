@@ -17,14 +17,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-<!--      <el-form-item label="${comment}" prop="createdAt">-->
-<!--        <el-date-picker clearable-->
-<!--          v-model="queryParams.createdAt"-->
-<!--          type="date"-->
-<!--          value-format="yyyy-MM-dd"-->
-<!--          placeholder="请选择${comment}">-->
-<!--        </el-date-picker>-->
-<!--      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -82,11 +74,6 @@
       <el-table-column label="关联ID" align="center" prop="id" />
       <el-table-column label="课程ID" align="center" prop="courseId" />
       <el-table-column label="科目ID" align="center" prop="subjectId" />
-<!--      <el-table-column label="${comment}" align="center" prop="createdAt" width="180">-->
-<!--        <template slot-scope="scope">-->
-<!--          <span>{{ parseTime(scope.row.createdAt, '{y}-{m}-{d}') }}</span>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -123,14 +110,6 @@
         </el-form-item>
         <el-form-item label="科目ID" prop="subjectId">
           <el-input v-model="form.subjectId" placeholder="请输入科目ID" />
-        </el-form-item>
-        <el-form-item label="${comment}" prop="createdAt">
-          <el-date-picker clearable
-            v-model="form.createdAt"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择${comment}">
-          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

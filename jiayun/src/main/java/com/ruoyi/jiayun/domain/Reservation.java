@@ -10,6 +10,7 @@ public class Reservation {
     private Long studentId;
     private Long coachId;
     private Long vehicleId;
+    private Integer subjectId;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate reservationDate;
     private String timeSlot;

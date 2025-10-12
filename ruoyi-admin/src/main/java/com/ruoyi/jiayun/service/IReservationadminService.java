@@ -7,7 +7,7 @@ import com.ruoyi.jiayun.domain.Reservationadmin;
  * 预约记录Service接口
  * 
  * @author ruoyi
- * @date 2025-10-09
+ * @date 2025-10-12
  */
 public interface IReservationadminService 
 {

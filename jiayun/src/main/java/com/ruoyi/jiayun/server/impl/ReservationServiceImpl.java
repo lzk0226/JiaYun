@@ -1,15 +1,19 @@
 package com.ruoyi.jiayun.server.impl;
+
 import com.ruoyi.jiayun.domain.Coach;
 import com.ruoyi.jiayun.domain.Reservation;
 import com.ruoyi.jiayun.domain.Vehicle;
 import com.ruoyi.jiayun.mapper.ReservationMapper;
 import com.ruoyi.jiayun.server.ReservationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.util.*;
 
+@Slf4j
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
@@ -25,9 +29,26 @@ public class ReservationServiceImpl implements ReservationService {
     );
 
     @Override
-    public List<Coach> getAvailableCoaches() {
-        return reservationMapper.selectAvailableCoaches();
+    public Coach getStudentCoachBySubject(Long studentId, Integer subjectId) {
+        if (subjectId == null || (subjectId != 2 && subjectId != 3)) {
+            throw new RuntimeException("无效的科目ID，只支持科目二(2)和科目三(3)");
+        }
+
+        // 检查学员是否已报名该科目
+        int enrolled = reservationMapper.checkStudentEnrolledSubject(studentId, subjectId);
+        if (enrolled == 0) {
+            throw new RuntimeException("您还未报名该科目的课程，请先报名");
+        }
+
+        // 获取学员在该科目下的教练
+        Coach coach = reservationMapper.selectStudentCoachBySubject(studentId, subjectId);
+        if (coach == null) {
+            throw new RuntimeException("未找到您在该科目下的教练，请联系管理员");
+        }
+
+        return coach;
     }
+
 
     @Override
     public List<Map<String, Object>> getAvailableTimeSlots(LocalDate date, Long coachId) {
@@ -46,17 +67,40 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Vehicle> getAvailableVehicles(LocalDate date, Long coachId, String timeSlot) {
-        // 获取该时段已被预约的车辆ID
+    public List<Vehicle> getAvailableVehicles(LocalDate date, Integer subjectId, String timeSlot) {
+        // 根据科目获取已被预约的车辆ID
         List<Long> bookedVehicleIds = reservationMapper.selectBookedVehicles(date, timeSlot);
 
-        // 获取所有可用车辆，排除已预约的
+        // 根据科目获取可用车辆（排除已预约的）
         return reservationMapper.selectAvailableVehicles(bookedVehicleIds);
     }
 
     @Override
     @Transactional
     public int createReservation(Reservation reservation) {
+        // 验证科目、教练、车辆和时段参数
+        if (reservation.getSubjectId() == null ||
+                reservation.getCoachId() == null ||
+                reservation.getVehicleId() == null ||
+                reservation.getReservationDate() == null ||
+                reservation.getTimeSlot() == null) {
+            throw new RuntimeException("缺少必要参数");
+        }
+
+        // 验证学员是否已报名该科目并分配了该教练
+        Coach assignedCoach = reservationMapper.selectStudentCoachBySubject(
+                reservation.getStudentId(),
+                reservation.getSubjectId()
+        );
+
+        if (assignedCoach == null) {
+            throw new RuntimeException("您还未报名该科目的课程");
+        }
+
+        if (!assignedCoach.getId().equals(reservation.getCoachId())) {
+            throw new RuntimeException("教练信息不匹配，请刷新页面重试");
+        }
+
         // 检查该时段该教练是否已被预约
         int count = reservationMapper.checkCoachAvailable(
                 reservation.getReservationDate(),
