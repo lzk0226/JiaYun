@@ -147,9 +147,9 @@ function renderInfo() {
   // 更新顶部信息（包括头像上传功能）
   document.getElementById('avatarImg').src = avatarUrl;
   document.getElementById('userName').textContent = userData.name || '未设置';
-  document.getElementById('userId').innerHTML = `<i class="fas fa-id-card"></i> 学员编号：${userData.userId || '未设置'}`;
+  document.getElementById('userId').innerHTML = `<i class="fas fa-id-card"></i> 学员编号：${userData.userId || '尚未有编号'}`;
   document.getElementById('registerDate').innerHTML = `<i class="fas fa-calendar"></i> 注册时间：${formatDate(userData.registerDate)}`;
-  document.getElementById('license').innerHTML = `<i class="fas fa-car"></i> 驾照类型：${userData.licenseType || '未设置'}`;
+  document.getElementById('license').innerHTML = `<i class="fas fa-car"></i> 驾照类型：${userData.licenseType || '尚未有驾照'}`;
 
   // 渲染表单（不包含头像上传）
   const infoDiv = document.getElementById('info');
@@ -180,17 +180,6 @@ function renderInfo() {
         <div class="form-group">
           <label>身份证号</label>
           <input type="text" id="idcard" value="${userData.idcard || ''}" placeholder="请输入身份证号">
-        </div>
-        <div class="form-group">
-          <label>驾照类型</label>
-          <select id="licenseType">
-            <option value="" ${!userData.licenseType || userData.licenseType === "" ? "selected" : ""}>无</option>
-            <option value="C1" ${userData.licenseType === "C1" ? "selected" : ""}>C1</option>
-            <option value="C2" ${userData.licenseType === "C2" ? "selected" : ""}>C2</option>
-            <option value="B2" ${userData.licenseType === "B2" ? "selected" : ""}>B2</option>
-            <option value="A2" ${userData.licenseType === "A2" ? "selected" : ""}>A2</option>
-            <option value="A1" ${userData.licenseType === "A1" ? "selected" : ""}>A1</option>
-          </select>
         </div>
       </div>
       <div class="form-group" style="margin-top:1.5rem;">

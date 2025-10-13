@@ -2,9 +2,10 @@
 const API_BASE_URL = 'http://localhost:8080/user';
 
 // ==================== 全局变量 ====================
+let selectedSubject = null;
+let assignedCoach = null;  // 自动分配的教练
 let selectedTime = null;
 let selectedVehicle = null;
-let currentCoachId = null;
 let currentDate = null;
 
 // ==================== 工具函数 ====================
@@ -71,24 +72,59 @@ function formatDate(dateString) {
   return date.toLocaleDateString('zh-CN');
 }
 
+// 获取科目名称
+function getSubjectName(subjectId) {
+  const names = {
+    '2': '科目二',
+    '3': '科目三'
+  };
+  return names[subjectId] || '未知科目';
+}
+
 // ==================== 数据加载函数 ====================
 
-// 加载教练列表
-async function loadCoaches() {
-  console.log('加载教练列表...');
-  const coaches = await apiRequest(`${API_BASE_URL}/reservation/coaches`);
+// 加载学员在指定科目下的教练
+async function loadStudentCoach(subjectId) {
+  console.log('加载学员教练，科目:', subjectId);
 
-  if (coaches && coaches.length > 0) {
-    const coachSelect = document.getElementById('coachSelect');
-    coachSelect.innerHTML = '<option value="">请选择教练</option>';
+  if (!subjectId) {
+    document.getElementById('coachInfo').innerHTML = '<p style="color:#999;">请先选择科目</p>';
+    return;
+  }
 
-    coaches.forEach(coach => {
-      const option = document.createElement('option');
-      option.value = coach.id;
-      option.textContent = `${coach.name} - ${coach.title}`;
-      option.dataset.coachInfo = JSON.stringify(coach);
-      coachSelect.appendChild(option);
-    });
+  const coach = await apiRequest(`${API_BASE_URL}/reservation/coach?subjectId=${subjectId}`);
+
+  const coachInfoDiv = document.getElementById('coachInfo');
+
+  if (coach) {
+    assignedCoach = coach;
+
+    coachInfoDiv.innerHTML = `
+      <div class="coach-card">
+        <div class="coach-header">
+          <div class="coach-avatar">
+            <i class="fas fa-user-tie"></i>
+          </div>
+          <div class="coach-details">
+            <h4>${coach.name}</h4>
+            <p>${coach.title || '专业教练'}</p>
+            <div class="coach-rating">
+              <i class="fas fa-star"></i>
+              <span>${coach.rating || '5.0'}</span>
+            </div>
+          </div>
+        </div>
+        ${coach.badge ? `<span class="coach-badge">${coach.badge}</span>` : ''}
+      </div>
+    `;
+
+    // 如果已选择日期，自动加载时段
+    if (currentDate) {
+      loadAvailableTimeSlots(currentDate, coach.id);
+    }
+  } else {
+    assignedCoach = null;
+    coachInfoDiv.innerHTML = '<p style="color:#e74c3c;">未找到您的教练信息，请联系管理员</p>';
   }
 }
 
@@ -124,15 +160,15 @@ async function loadAvailableTimeSlots(date, coachId) {
 }
 
 // 加载可用车辆
-async function loadAvailableVehicles(date, coachId, timeSlot) {
-  console.log('加载车辆:', date, coachId, timeSlot);
+async function loadAvailableVehicles(date, subjectId, timeSlot) {
+  console.log('加载车辆:', date, subjectId, timeSlot);
 
-  if (!date || !coachId || !timeSlot) {
+  if (!date || !subjectId || !timeSlot) {
     return;
   }
 
   const vehicles = await apiRequest(
-    `${API_BASE_URL}/reservation/available-vehicles?date=${date}&coachId=${coachId}&timeSlot=${encodeURIComponent(timeSlot)}`
+    `${API_BASE_URL}/reservation/available-vehicles?date=${date}&subjectId=${subjectId}&timeSlot=${encodeURIComponent(timeSlot)}`
   );
 
   const vehicleGrid = document.getElementById('vehicleGrid');
@@ -194,6 +230,7 @@ function renderHistory(list) {
     };
 
     const status = statusMap[item.status] || { class: '', text: item.status };
+    const subjectName = getSubjectName(item.subjectId);
 
     historyItem.innerHTML = `
       <div class="history-header">
@@ -201,6 +238,10 @@ function renderHistory(list) {
         <span class="status-badge ${status.class}">${status.text}</span>
       </div>
       <div class="history-details">
+        <div class="detail-item">
+          <i class="fas fa-book"></i>
+          <span>${subjectName}</span>
+        </div>
         <div class="detail-item">
           <i class="fas fa-car"></i>
           <span>${item.vehicle ? (item.vehicle.plateNumber || item.vehicle.model) : '未分配'}</span>
@@ -239,8 +280,8 @@ function selectTimeSlot(element, time) {
   selectedVehicle = null;
 
   // 加载可用车辆
-  if (currentDate && currentCoachId) {
-    loadAvailableVehicles(currentDate, currentCoachId, time);
+  if (currentDate && selectedSubject) {
+    loadAvailableVehicles(currentDate, selectedSubject, time);
   }
 }
 
@@ -253,7 +294,7 @@ function selectVehicle(element, vehicleId) {
 
 // 取消预约
 async function cancelReservation(id) {
-  if (!confirm('确定取消预约吗？')) return;
+  if (!confirm('确认取消预约吗？')) return;
 
   const result = await apiRequest(`${API_BASE_URL}/reservation/${id}/cancel`, {
     method: 'PUT'
@@ -267,7 +308,7 @@ async function cancelReservation(id) {
 
 // 删除预约记录
 async function deleteReservation(id) {
-  if (!confirm('确定删除记录吗？')) return;
+  if (!confirm('确认删除记录吗？')) return;
 
   const result = await apiRequest(`${API_BASE_URL}/reservation/${id}`, {
     method: 'DELETE'
@@ -284,14 +325,32 @@ async function viewDetail(id) {
   const detail = await apiRequest(`${API_BASE_URL}/reservation/${id}`);
 
   if (detail) {
+    const subjectName = getSubjectName(detail.subjectId);
     const coachInfo = detail.coach ? `${detail.coach.name} - ${detail.coach.title || ''}` : '未分配';
     const vehicleInfo = detail.vehicle ? `${detail.vehicle.plateNumber || ''} ${detail.vehicle.model || ''}` : '未分配';
 
-    alert(`预约详情\n\n日期：${detail.reservationDate}\n时段：${detail.timeSlot}\n教练：${coachInfo}\n车辆：${vehicleInfo}\n备注：${detail.remarks || '无'}\n状态：${detail.status}`);
+    alert(`预约详情\n\n科目：${subjectName}\n日期：${detail.reservationDate}\n时段：${detail.timeSlot}\n教练：${coachInfo}\n车辆：${vehicleInfo}\n备注：${detail.remarks || '无'}\n状态：${detail.status}`);
   }
 }
 
 // ==================== 事件绑定 ====================
+
+// 科目选择
+document.getElementById('subjectSelect').addEventListener('change', function (e) {
+  selectedSubject = e.target.value ? parseInt(e.target.value) : null;
+  assignedCoach = null;
+  selectedTime = null;
+  selectedVehicle = null;
+
+  document.getElementById('timeGrid').innerHTML = '';
+  document.getElementById('vehicleGrid').innerHTML = '';
+
+  if (selectedSubject) {
+    loadStudentCoach(selectedSubject);
+  } else {
+    document.getElementById('coachInfo').innerHTML = '<p style="color:#999;">请先选择科目</p>';
+  }
+});
 
 // 日期选择
 document.getElementById('bookingDate').addEventListener('change', function (e) {
@@ -302,22 +361,8 @@ document.getElementById('bookingDate').addEventListener('change', function (e) {
   document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
   document.getElementById('vehicleGrid').innerHTML = '';
 
-  if (currentDate && currentCoachId) {
-    loadAvailableTimeSlots(currentDate, currentCoachId);
-  }
-});
-
-// 教练选择
-document.getElementById('coachSelect').addEventListener('change', function (e) {
-  currentCoachId = e.target.value;
-  selectedTime = null;
-  selectedVehicle = null;
-
-  document.getElementById('timeGrid').innerHTML = '';
-  document.getElementById('vehicleGrid').innerHTML = '';
-
-  if (currentDate && currentCoachId) {
-    loadAvailableTimeSlots(currentDate, currentCoachId);
+  if (currentDate && assignedCoach) {
+    loadAvailableTimeSlots(currentDate, assignedCoach.id);
   }
 });
 
@@ -325,13 +370,18 @@ document.getElementById('coachSelect').addEventListener('change', function (e) {
 document.getElementById('bookingForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
-  if (!currentDate) {
-    alert('请选择预约日期');
+  if (!selectedSubject) {
+    alert('请选择科目');
     return;
   }
 
-  if (!currentCoachId) {
-    alert('请选择教练');
+  if (!assignedCoach) {
+    alert('未找到您的教练信息');
+    return;
+  }
+
+  if (!currentDate) {
+    alert('请选择预约日期');
     return;
   }
 
@@ -348,7 +398,8 @@ document.getElementById('bookingForm').addEventListener('submit', async function
   const remarks = document.getElementById('remarks').value.trim();
 
   const reservationData = {
-    coachId: parseInt(currentCoachId),
+    subjectId: selectedSubject,
+    coachId: assignedCoach.id,
     vehicleId: parseInt(selectedVehicle),
     reservationDate: currentDate,
     timeSlot: selectedTime,
@@ -367,11 +418,13 @@ document.getElementById('bookingForm').addEventListener('submit', async function
 
     // 重置表单
     this.reset();
-    currentDate = null;
-    currentCoachId = null;
+    selectedSubject = null;
+    assignedCoach = null;
     selectedTime = null;
     selectedVehicle = null;
+    currentDate = null;
 
+    document.getElementById('coachInfo').innerHTML = '<p style="color:#999;">请先选择科目</p>';
     document.getElementById('timeGrid').innerHTML = '';
     document.getElementById('vehicleGrid').innerHTML = '';
 
@@ -410,11 +463,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const today = new Date().toISOString().split('T')[0];
   const dateInput = document.getElementById('bookingDate');
   dateInput.setAttribute('min', today);
-  dateInput.value = today;
-  currentDate = today;
 
   // 加载初始数据
-  await loadCoaches();
   await loadReservationHistory();
 
   // 加载导航栏
