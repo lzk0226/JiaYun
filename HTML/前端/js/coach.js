@@ -183,17 +183,20 @@ function applyFilters() {
     filtered = filtered.filter(c => c.level === level);
   }
 
-  if (subject) {
-    if (subject === 'subject2') {
-      filtered = filtered.filter(c => c.subjects.includes('科目二'));
-    } else if (subject === 'subject3') {
-      filtered = filtered.filter(c => c.subjects.includes('科目三'));
-    } else if (subject === 'all') {
-      filtered = filtered.filter(c =>
-        c.subjects.includes('科目二') && c.subjects.includes('科目三')
-      );
-    }
+  const subjectMap = {
+    subject1: '科目一',
+    subject2: '科目二',
+    subject3: '科目三',
+    subject4: '科目四',
+    all: 'all'
+  };
+
+  if (subject && subject !== 'all') {
+    filtered = filtered.filter(c => c.subjects.includes(subjectMap[subject]));
+  } else if (subject === 'all') {
+    filtered = filtered.filter(c => c.subjects.includes('科目二') && c.subjects.includes('科目三'));
   }
+
 
   if (sort === 'rating') {
     filtered.sort((a, b) => b.rating - a.rating);

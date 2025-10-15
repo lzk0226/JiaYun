@@ -100,29 +100,28 @@ public class ProfileServiceImpl implements ProfileService {
             examMap.put(e.getSubjectId(), e);
         }
 
+        // 遍历所有科目
         for (int i = 1; i <= 4; i++) {
-            Map<String, Object> item = new HashMap<>();
             LearningProgress progress = progressMap.get(i);
             Exam exam = examMap.get(i);
 
+            // 只有当进度记录存在时才添加到时间线
             if (progress != null && progress.getSubject() != null) {
+                Map<String, Object> item = new HashMap<>();
                 item.put("title", progress.getSubject().getSubjectName());
 
-                String status = "未开始";
-                if (exam != null) {
-                    if ("passed".equals(exam.getStatus())) {
-                        status = "已通过";
-                    } else if ("scheduled".equals(exam.getStatus())) {
-                        status = "进行中";
-                    }
-                } else if ("in_progress".equals(progress.getStatus())) {
-                    status = "进行中";
-                } else if ("completed".equals(progress.getStatus())) {
-                    status = "已完成";
-                }
-                item.put("status", status);
+                // ⭐ 修改状态判断逻辑 - 优先判断考试状态,然后判断学习进度状态
+                String status = convertProgressStatus(progress.getStatus());
 
+                // 如果有考试记录,考试状态优先级更高
                 if (exam != null) {
+                    String examStatus = convertExamStatus(exam.getStatus());
+                    // 如果考试状态不是"未开始",则使用考试状态
+                    if (!"未开始".equals(examStatus)) {
+                        status = examStatus;
+                    }
+
+                    // 添加考试信息
                     item.put("time", exam.getExamTime());
                     if (exam.getScore() != null) {
                         item.put("score", exam.getScore());
@@ -132,6 +131,9 @@ public class ProfileServiceImpl implements ProfileService {
                     }
                 }
 
+                item.put("status", status);
+
+                // 添加学习进度信息
                 if (progress.getCompletedLessons() != null) {
                     item.put("completedLessons", progress.getCompletedLessons());
                 }
@@ -144,6 +146,48 @@ public class ProfileServiceImpl implements ProfileService {
         }
 
         return timeline;
+    }
+
+    /**
+     * 转换学习进度状态为中文
+     */
+    private String convertProgressStatus(String status) {
+        if (status == null) {
+            return "未开始";
+        }
+
+        switch (status.toLowerCase()) {
+            case "in_progress":
+                return "进行中";
+            case "completed":
+                return "已完成";
+            case "not_started":
+                return "未开始";
+            default:
+                return "错误";
+        }
+    }
+
+    /**
+     * 转换考试状态为中文
+     */
+    private String convertExamStatus(String status) {
+        if (status == null) {
+            return "未开始";
+        }
+
+        switch (status.toLowerCase()) {
+            case "passed":
+                return "已通过";
+            case "failed":
+                return "未通过";
+            case "scheduled":
+                return "进行中";
+            case "cancelled":
+                return "已取消";
+            default:
+                return "未开始";
+        }
     }
 
     /**

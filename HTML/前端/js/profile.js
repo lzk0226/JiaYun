@@ -425,7 +425,7 @@ async function saveInfo() {
     birthdate: document.getElementById('birthdate').value,
     phone: document.getElementById('phone').value.trim(),
     idcard: document.getElementById('idcard').value.trim(),
-    licenseType: document.getElementById('licenseType').value,
+    //licenseType: document.getElementById('licenseType').value,
     address: document.getElementById('address').value.trim()
     // 不包含 avatar 字段，避免清空头像
   };
