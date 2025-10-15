@@ -144,7 +144,13 @@
       <el-table-column label="已完成课时" align="center" prop="completedLessons" />
       <el-table-column label="总课时" align="center" prop="totalLessons" />
       <el-table-column label="进度百分比" align="center" prop="progress" />
-      <el-table-column label="状态" align="center" prop="status" />
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-tag :type="getStatusType(scope.row.status)">
+            {{ statusOptions[scope.row.status] || scope.row.status }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -210,6 +216,14 @@
         <el-form-item label="进度百分比" prop="progress">
           <el-input v-model="form.progress" placeholder="请输入进度百分比" />
         </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="form.status" placeholder="请选择状态" style="width: 100%">
+            <el-option label="学习中" value="ongoing"></el-option>
+            <el-option label="已完成" value="completed"></el-option>
+            <el-option label="已暂停" value="suspended"></el-option>
+            <el-option label="已取消" value="cancelled"></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -244,6 +258,13 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 状态字典
+      statusOptions: {
+        'ongoing': '进行中',
+        'completed': '已完成',
+        'suspended': '已暂停',
+        'cancelled': '已取消'
+      },
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -348,6 +369,16 @@ export default {
         this.title = "修改学员课程关联"
       })
     },
+    /** 获取状态标签类型 */
+    getStatusType(status) {
+      const typeMap = {
+        'ongoing': 'success',
+        'completed': 'info',
+        'suspended': 'warning',
+        'cancelled': 'danger'
+      }
+      return typeMap[status] || 'info'
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -371,7 +402,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除学员课程关联编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除学员课程关联编号为"' + ids + '"的数据项?').then(function() {
         return delStudent_courseadmin(ids)
       }).then(() => {
         this.getList()

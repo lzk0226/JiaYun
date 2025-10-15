@@ -79,7 +79,16 @@
           <image-preview :src="scope.row.vehicleImage" :width="50" :height="50"/>
         </template>
       </el-table-column>
-      <el-table-column label="车辆状态" align="center" prop="status" />
+      <el-table-column label="车辆状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-tag
+            :type="scope.row.status === 'available' ? 'success'
+            : scope.row.status === 'maintenance' ? 'warning'
+            : 'info'">
+            {{ statusText(scope.row.status) }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -119,6 +128,13 @@
         </el-form-item>
         <el-form-item label="车辆图片base64编码" prop="vehicleImage">
           <image-upload v-model="form.vehicleImage"/>
+        </el-form-item>
+        <el-form-item label="车辆状态" prop="status">
+          <el-select v-model="form.status" placeholder="请选择车辆状态">
+            <el-option label="可用" value="available" />
+            <el-option label="维护中" value="maintenance" />
+            <el-option label="已退役" value="retired" />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -215,6 +231,14 @@ export default {
     resetQuery() {
       this.resetForm("queryForm")
       this.handleQuery()
+    },
+    statusText(value) {
+      const map = {
+        available: '可用',
+        maintenance: '维护中',
+        retired: '已退役'
+      }
+      return map[value] || value
     },
     // 多选框选中数据
     handleSelectionChange(selection) {

@@ -136,6 +136,12 @@
         <el-form-item label="排序顺序" prop="sortOrder">
           <el-input v-model="form.sortOrder" placeholder="请输入排序顺序" />
         </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="form.status">
+            <el-radio :label="1">启用</el-radio>
+            <el-radio :label="0">停用</el-radio>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>

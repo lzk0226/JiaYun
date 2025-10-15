@@ -130,7 +130,18 @@
         </template>
       </el-table-column>
       <el-table-column label="考试成绩" align="center" prop="score" />
-      <el-table-column label="考试状态" align="center" prop="status" />
+      <el-table-column label="考试状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-tag
+            :type="scope.row.status === 'scheduled' ? 'info'
+            : scope.row.status === 'passed' ? 'success'
+            : scope.row.status === 'failed' ? 'danger'
+            : 'warning'">
+            {{ statusText(scope.row.status) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -184,6 +195,14 @@
         </el-form-item>
         <el-form-item label="考试成绩" prop="score">
           <el-input v-model="form.score" placeholder="请输入考试成绩" />
+        </el-form-item>
+        <el-form-item label="考试状态" prop="status">
+          <el-select v-model="form.status" placeholder="请选择考试状态">
+            <el-option label="已安排" value="scheduled" />
+            <el-option label="已通过" value="passed" />
+            <el-option label="未通过" value="failed" />
+            <el-option label="已取消" value="cancelled" />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -305,6 +324,16 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
+    statusText(value) {
+      const map = {
+        scheduled: '已安排',
+        passed: '已通过',
+        failed: '未通过',
+        cancelled: '已取消'
+      }
+      return map[value] || value
+    },
+
     /** 新增按钮操作 */
     handleAdd() {
       this.reset()

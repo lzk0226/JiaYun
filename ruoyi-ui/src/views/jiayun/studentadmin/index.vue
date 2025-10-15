@@ -122,7 +122,11 @@
       <el-table-column label="学员ID" align="center" prop="id" />
       <el-table-column label="学员编号" align="center" prop="userId" />
       <el-table-column label="姓名" align="center" prop="name" />
-      <el-table-column label="性别" align="center" prop="gender" />
+      <el-table-column label="性别" align="center" prop="gender">
+        <template slot-scope="scope">
+          <span>{{ scope.row.gender === 'male' ? '男' : scope.row.gender === 'female' ? '女' : '' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="出生日期" align="center" prop="birthdate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.birthdate, '{y}-{m}-{d}') }}</span>
@@ -206,6 +210,15 @@
         <el-form-item label="身份证号" prop="idcard">
           <el-input v-model="form.idcard" placeholder="请输入身份证号" />
         </el-form-item>
+        <el-form-item label="驾照类型" prop="licenseType">
+          <el-select v-model="form.licenseType" placeholder="请选择驾照类型" style="width: 100%">
+            <el-option label="未选择" value=""></el-option>
+            <el-option label="C1" value="C1"></el-option>
+            <el-option label="C2" value="C2"></el-option>
+            <el-option label="B2" value="B2"></el-option>
+            <el-option label="A2" value="A2"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="联系地址" prop="address">
           <el-input v-model="form.address" placeholder="请输入联系地址" />
         </el-form-item>
@@ -231,6 +244,7 @@
                           placeholder="请选择注册日期">
           </el-date-picker>
         </el-form-item>
+
         <el-form-item label="密码" prop="password">
           <el-input v-model="form.password" placeholder="请输入密码" />
         </el-form-item>

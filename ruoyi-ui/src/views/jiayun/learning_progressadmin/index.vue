@@ -108,7 +108,17 @@
       <el-table-column label="科目ID" align="center" prop="subjectId" />
       <el-table-column label="已完成课时" align="center" prop="completedLessons" />
       <el-table-column label="进度百分比" align="center" prop="progressPercent" />
-      <el-table-column label="状态" align="center" prop="status" />
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-tag
+            :type="scope.row.status === 'not_started' ? 'info'
+            : scope.row.status === 'in_progress' ? 'warning'
+            : 'success'">
+            {{ statusText(scope.row.status) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -152,14 +162,14 @@
         <el-form-item label="进度百分比" prop="progressPercent">
           <el-input v-model="form.progressPercent" placeholder="请输入进度百分比" />
         </el-form-item>
-        <el-form-item label="${comment}" prop="createdAt">
-          <el-date-picker clearable
-            v-model="form.createdAt"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择${comment}">
-          </el-date-picker>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="form.status" placeholder="请选择状态">
+            <el-option label="未开始" value="not_started" />
+            <el-option label="进行中" value="in_progress" />
+            <el-option label="已完成" value="completed" />
+          </el-select>
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -231,6 +241,14 @@ export default {
         this.total = response.total
         this.loading = false
       })
+    },
+    statusText(value) {
+      const map = {
+        not_started: '未开始',
+        in_progress: '进行中',
+        completed: '已完成'
+      }
+      return map[value] || value
     },
     // 取消按钮
     cancel() {

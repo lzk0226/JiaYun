@@ -138,7 +138,12 @@
       <el-table-column label="课程ID" align="center" prop="id" />
       <el-table-column label="课程名称" align="center" prop="name" />
       <el-table-column label="主要科目ID" align="center" prop="subjectId" />
-      <el-table-column label="课程类型" align="center" prop="type" />
+      <!-- 课程类型列 -->
+      <el-table-column label="课程类型" align="center" prop="type">
+        <template slot-scope="scope">
+          <span>{{ courseTypeOptions[scope.row.type] || scope.row.type }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="副标题" align="center" prop="subtitle" />
       <el-table-column label="标签" align="center" prop="badge" />
       <el-table-column label="课时数" align="center" prop="duration" />
@@ -186,6 +191,13 @@
         <el-form-item label="主要科目ID" prop="subjectId">
           <el-input v-model="form.subjectId" placeholder="请输入主要科目ID" />
         </el-form-item>
+        <el-form-item label="课程类型" prop="type">
+          <el-select v-model="form.type" placeholder="请选择课程类型" style="width: 100%">
+            <el-option label="标准班" value="standard"></el-option>
+            <el-option label="VIP班" value="vip"></el-option>
+            <el-option label="速成班" value="intensive"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="副标题" prop="subtitle">
           <el-input v-model="form.subtitle" placeholder="请输入副标题" />
         </el-form-item>
@@ -207,8 +219,17 @@
         <el-form-item label="报名人数" prop="studentsCount">
           <el-input v-model="form.studentsCount" placeholder="请输入报名人数" />
         </el-form-item>
-        <el-form-item label="是否联报课程：1-是，0-否" prop="isCombined">
-          <el-input v-model="form.isCombined" placeholder="请输入是否联报课程：1-是，0-否" />
+        <el-form-item label="是否联报" prop="isCombined">
+          <el-radio-group v-model="form.isCombined">
+            <el-radio :label="1">是</el-radio>
+            <el-radio :label="0">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="form.status">
+            <el-radio :label="1">启用</el-radio>
+            <el-radio :label="0">停用</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -263,6 +284,21 @@ export default {
         status: null,
         createdAt: null,
         updatedAt: null
+      },
+      courseTypeOptions: {
+        'standard': '标准班',
+        'vip': 'VIP班',
+        'intensive': '速成班'
+      },
+      // 课程状态字典
+      courseStatusOptions: {
+        1: '启用',
+        0: '停用'
+      },
+      // 是否联报字典
+      isCombinedOptions: {
+        1: '是',
+        0: '否'
       },
       // 表单参数
       form: {},
