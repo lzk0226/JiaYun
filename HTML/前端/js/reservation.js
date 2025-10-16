@@ -15,13 +15,106 @@ function getToken() {
   return sessionStorage.getItem('token');
 }
 
+// 自定义提示框
+function showCustomAlert(message, type = 'info') {
+  const icons = {
+    success: 'fa-check-circle',
+    error: 'fa-times-circle',
+    warning: 'fa-exclamation-triangle',
+    info: 'fa-info-circle'
+  };
+
+  const colors = {
+    success: '#10b981',
+    error: '#ef4444',
+    warning: '#f59e0b',
+    info: '#3b82f6'
+  };
+
+  const alertHtml = `
+    <div class="custom-alert ${type}" id="customAlert">
+      <div class="custom-alert-content">
+        <i class="fas ${icons[type]}"></i>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+      </div>
+    </div>
+  `;
+
+  // 移除已存在的提示框
+  const existingAlert = document.getElementById('customAlert');
+  if (existingAlert) {
+    existingAlert.remove();
+  }
+
+  document.body.insertAdjacentHTML('beforeend', alertHtml);
+  const alertElement = document.getElementById('customAlert');
+
+  setTimeout(() => alertElement.classList.add('show'), 10);
+
+  setTimeout(() => {
+    alertElement.classList.remove('show');
+    setTimeout(() => alertElement.remove(), 300);
+  }, 3000);
+}
+
+// 自定义确认框
+function showCustomConfirm(message, onConfirm) {
+  const confirmHtml = `
+    <div class="custom-modal-overlay" id="confirmOverlay">
+      <div class="custom-modal-content confirm-modal">
+        <div class="custom-modal-header">
+          <h3><i class="fas fa-question-circle"></i> 确认操作</h3>
+        </div>
+        <div class="custom-modal-body">
+          <p style="text-align: center; font-size: 16px; color: #475569; line-height: 1.6;">
+            ${message.replace(/\n/g, '<br>')}
+          </p>
+        </div>
+        <div class="custom-modal-footer">
+          <button class="btn-cancel" onclick="closeCustomConfirm()">取消</button>
+          <button class="btn-confirm" onclick="confirmAction()">确认</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', confirmHtml);
+
+  setTimeout(() => {
+    document.getElementById('confirmOverlay').classList.add('active');
+  }, 10);
+
+  // 存储回调函数
+  window.currentConfirmCallback = onConfirm;
+}
+
+// 关闭确认框
+function closeCustomConfirm() {
+  const overlay = document.getElementById('confirmOverlay');
+  if (overlay) {
+    overlay.classList.remove('active');
+    setTimeout(() => overlay.remove(), 300);
+  }
+  window.currentConfirmCallback = null;
+}
+
+// 执行确认操作
+function confirmAction() {
+  if (window.currentConfirmCallback) {
+    window.currentConfirmCallback();
+  }
+  closeCustomConfirm();
+}
+
 // API 请求封装
 async function apiRequest(url, options = {}) {
   const token = getToken();
 
   if (!token) {
-    alert('请先登录');
-    window.location.href = 'login.html';
+    showCustomAlert('请先登录', 'warning');
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 1500);
     return null;
   }
 
@@ -51,16 +144,18 @@ async function apiRequest(url, options = {}) {
     if (result.code === 200) {
       return result.data;
     } else {
-      alert(result.message || result.msg || '请求失败');
+      showCustomAlert(result.message || result.msg || '请求失败', 'error');
       if (result.message && result.message.includes('Token')) {
         sessionStorage.clear();
-        window.location.href = 'login.html';
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 1500);
       }
       return null;
     }
   } catch (error) {
     console.error('API请求失败:', error);
-    alert('网络请求失败，请检查后端服务是否启动');
+    showCustomAlert('网络请求失败，请检查后端服务是否启动', 'error');
     return null;
   }
 }
@@ -294,30 +389,30 @@ function selectVehicle(element, vehicleId) {
 
 // 取消预约
 async function cancelReservation(id) {
-  if (!confirm('确认取消预约吗？')) return;
+  showCustomConfirm('确认取消预约吗？', async () => {
+    const result = await apiRequest(`${API_BASE_URL}/reservation/${id}/cancel`, {
+      method: 'PUT'
+    });
 
-  const result = await apiRequest(`${API_BASE_URL}/reservation/${id}/cancel`, {
-    method: 'PUT'
+    if (result !== null) {
+      showCustomAlert('取消成功', 'success');
+      loadReservationHistory();
+    }
   });
-
-  if (result !== null) {
-    alert('取消成功');
-    loadReservationHistory();
-  }
 }
 
 // 删除预约记录
 async function deleteReservation(id) {
-  if (!confirm('确认删除记录吗？')) return;
+  showCustomConfirm('确认删除记录吗？', async () => {
+    const result = await apiRequest(`${API_BASE_URL}/reservation/${id}`, {
+      method: 'DELETE'
+    });
 
-  const result = await apiRequest(`${API_BASE_URL}/reservation/${id}`, {
-    method: 'DELETE'
+    if (result !== null) {
+      showCustomAlert('删除成功', 'success');
+      loadReservationHistory();
+    }
   });
-
-  if (result !== null) {
-    alert('删除成功');
-    loadReservationHistory();
-  }
 }
 
 // 查看详情
@@ -329,7 +424,9 @@ async function viewDetail(id) {
     const coachInfo = detail.coach ? `${detail.coach.name} - ${detail.coach.title || ''}` : '未分配';
     const vehicleInfo = detail.vehicle ? `${detail.vehicle.plateNumber || ''} ${detail.vehicle.model || ''}` : '未分配';
 
-    alert(`预约详情\n\n科目：${subjectName}\n日期：${detail.reservationDate}\n时段：${detail.timeSlot}\n教练：${coachInfo}\n车辆：${vehicleInfo}\n备注：${detail.remarks || '无'}\n状态：${detail.status}`);
+    const detailMessage = `预约详情\n\n科目：${subjectName}\n日期：${detail.reservationDate}\n时段：${detail.timeSlot}\n教练：${coachInfo}\n车辆：${vehicleInfo}\n备注：${detail.remarks || '无'}\n状态：${detail.status}`;
+
+    showCustomAlert(detailMessage, 'info');
   }
 }
 
@@ -371,27 +468,27 @@ document.getElementById('bookingForm').addEventListener('submit', async function
   e.preventDefault();
 
   if (!selectedSubject) {
-    alert('请选择科目');
+    showCustomAlert('请选择科目', 'warning');
     return;
   }
 
   if (!assignedCoach) {
-    alert('未找到您的教练信息');
+    showCustomAlert('未找到您的教练信息', 'error');
     return;
   }
 
   if (!currentDate) {
-    alert('请选择预约日期');
+    showCustomAlert('请选择预约日期', 'warning');
     return;
   }
 
   if (!selectedTime) {
-    alert('请选择时段');
+    showCustomAlert('请选择时段', 'warning');
     return;
   }
 
   if (!selectedVehicle) {
-    alert('请选择车辆');
+    showCustomAlert('请选择车辆', 'warning');
     return;
   }
 
@@ -414,7 +511,7 @@ document.getElementById('bookingForm').addEventListener('submit', async function
   });
 
   if (result !== null) {
-    alert('预约成功！');
+    showCustomAlert('预约成功！', 'success');
 
     // 重置表单
     this.reset();
@@ -454,8 +551,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 检查登录状态
   const token = getToken();
   if (!token) {
-    alert('请先登录');
-    window.location.href = 'login.html';
+    showCustomAlert('请先登录', 'warning');
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 1500);
     return;
   }
 
@@ -497,3 +596,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 window.cancelReservation = cancelReservation;
 window.deleteReservation = deleteReservation;
 window.viewDetail = viewDetail;
+window.closeCustomConfirm = closeCustomConfirm;
+window.confirmAction = confirmAction;

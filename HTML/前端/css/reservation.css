@@ -357,3 +357,187 @@
         flex-direction: column;
       }
     }
+
+    /* ==================== 自定义提示框样式 ==================== */
+    .custom-alert {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      z-index: 10000;
+      min-width: 300px;
+      max-width: 500px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .custom-alert.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .custom-alert-content {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 20px 25px;
+    }
+
+    .custom-alert-content i {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .custom-alert-content p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #1e293b;
+    }
+
+    .custom-alert.success .custom-alert-content i {
+      color: #10b981;
+    }
+
+    .custom-alert.error .custom-alert-content i {
+      color: #ef4444;
+    }
+
+    .custom-alert.warning .custom-alert-content i {
+      color: #f59e0b;
+    }
+
+    .custom-alert.info .custom-alert-content i {
+      color: #3b82f6;
+    }
+
+    /* ==================== 自定义确认框样式 ==================== */
+    .custom-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .custom-modal-overlay.active {
+      opacity: 1;
+    }
+
+    .custom-modal-content {
+      background: white;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 450px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .custom-modal-overlay.active .custom-modal-content {
+      transform: scale(1);
+    }
+
+    .custom-modal-header {
+      padding: 20px 25px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .custom-modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .custom-modal-header h3 i {
+      color: #3b82f6;
+    }
+
+    .custom-modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .custom-modal-close:hover {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .custom-modal-body {
+      padding: 25px;
+    }
+
+    .custom-modal-footer {
+      padding: 20px 25px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .btn-cancel,
+    .btn-confirm {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-cancel {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .btn-cancel:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-confirm {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn-confirm:hover {
+      background: #2563eb;
+    }
+
+    /* 确认框特殊样式 */
+    .confirm-modal {
+      max-width: 400px;
+    }
+
+    .confirm-modal .custom-modal-body {
+      padding: 30px 25px;
+    }
